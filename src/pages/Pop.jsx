@@ -1,13 +1,14 @@
 import { NavLink } from "react-router-dom";
 import Header from "../components/header.jsx";
 import Navbar from "../components/navbar.jsx";
-export default function Home() {
+import CategoryLine from "../components/categoryline.jsx";
+import Posts from "../components/posts.jsx";
+export default function Popular() {
   return (
     <>
       <Header />
-      <div className="home">
-        <h3>Select the page here</h3>
-      </div>
+      <CategoryLine />
+      <Posts />
       <Navbar />
     </>
   );
