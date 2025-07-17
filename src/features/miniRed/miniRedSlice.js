@@ -17,7 +17,7 @@ export const miniRedSlice = createSlice({
       data: [],
       loading: false,
       error: false,
-      },
+    },
   },
   reducers: {},
   extraReducers: (builder) => {
@@ -28,8 +28,8 @@ export const miniRedSlice = createSlice({
       })
       .addCase(fetchPostsThunk.fulfilled, (state, action) => {
         state.posts.data = action.payload;
-        console.log("Reducer ran with:", action.payload);
         console.log("Reducer state:", state.posts.data);
+        localStorage.setItem("popposts", JSON.stringify(action.payload));
         state.posts.loading = false;
         state.posts.error = false;
       })
@@ -37,7 +37,7 @@ export const miniRedSlice = createSlice({
         state.posts.loading = false;
         state.posts.error = true;
       });
-  }
+  },
 });
 
 export default miniRedSlice.reducer;

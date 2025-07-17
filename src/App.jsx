@@ -5,6 +5,7 @@ import Start from "./pages/Start.jsx";
 import Main from "./pages/Main.jsx";
 import Popular from "./pages/Pop.jsx";
 
+
 function App() {
   return (
     <BrowserRouter>

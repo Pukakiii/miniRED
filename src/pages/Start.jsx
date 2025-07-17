@@ -2,8 +2,8 @@ import { Link, NavLink, Outlet } from "react-router-dom";
 import Header from "../components/header.jsx";
 import Navbar from "../components/navbar.jsx";
 import CategoryLine from "../components/categoryline.jsx";
-import mainIcon from "../assets/main.svg";
-import popIcon from "../assets/popoular.svg";
+import mainIcon from "../assets/navbar/main.svg";
+import popIcon from "../assets/navbar/popoular.svg";
 
 export default function Start() {
   return (

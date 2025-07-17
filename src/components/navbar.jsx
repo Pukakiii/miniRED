@@ -1,9 +1,9 @@
 import { NavLink } from 'react-router-dom';
-import popular from '../assets/popoular.svg';
-import refresh from '../assets/refresh.svg';
-import main from '../assets/main.svg';
-import setting from '../assets/settings.svg';
-import saved from '../assets/saved-menu.jpg';
+import popular from '../assets/navbar/popoular.svg';
+import refresh from '../assets/navbar/refresh.svg';
+import main from '../assets/navbar/main.svg';
+import setting from '../assets/navbar/settings.svg';
+import saved from '../assets/navbar/saved-menu.svg';
 export default function Navbar() {
   return (
     <nav className="navbar">
