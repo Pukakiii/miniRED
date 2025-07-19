@@ -9,7 +9,6 @@ export default function Start() {
   return (
     <>
       <Header />
-      <CategoryLine />
       <div className="start-nav">
         <Link to="/main">
           <img
@@ -18,7 +17,7 @@ export default function Start() {
             alt="main page"
           />
         </Link>
-        <Link to="/pop">
+        <Link to="/popular">
           <img
             style={{ height: "100px", width: "100px" }}
             src={popIcon}
@@ -26,8 +25,7 @@ export default function Start() {
           />
         </Link>
       </div>
-      <div id="flame-container"
-      ></div>
+      <div id="flame-container"></div>
     </>
   );
 }

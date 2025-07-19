@@ -3,8 +3,8 @@ import fetchPosts from "../../api/postsAPI.js";
 
 export const fetchPostsThunk = createAsyncThunk(
   "posts/fetchPostsThunk",
-  async () => {
-    const response = await fetchPosts();
+  async (category) => {
+    const response = await fetchPosts(category);
     console.log("Fetched posts:", response);
     return response;
   }

@@ -2,18 +2,26 @@ import coments from "../assets/comments.svg";
 import vote from "../assets/vote.svg";
 import saved from "../assets/navbar/saved-menu.svg";
 
-export default function PopReddPost({ data }) {
-  console.log("obj keys:", Object.keys(data), data.url);
+export default function PopPost({ data }) {
+  const numDownvotes = (score, ratio) => {
+    const ups = Math.round((score * ratio) / (2 * ratio - 1));
+    const downs = ups - score;
+    return { ups, downs };
+  };
+  const { ups, downs } = numDownvotes(data.ups, data.ratio);
+  // console.log("data:", data);
+  // console.log("obj urls:", data.url);
+
   return (
     <article className="post">
       <div
-        id="pop-post-title-box"
-        className="pop-post-title pop-cell"
+        id="popular-post-title-box"
+        className="popular-post-title popular-cell"
         style={{ gridArea: "title" }}
       >
         <h3
-          id="pop-post-title"
-          className="pop-cell"
+          id="popular-post-title"
+          className="popular-cell"
           style={{ gridArea: "title" }}
         >
           {data.title}
@@ -21,14 +29,13 @@ export default function PopReddPost({ data }) {
       </div>
       <time
         id="time"
-        className="pop-cell"
-        datetime=""
+        className="popular-cell"
         style={{ gridArea: "time" }}
       >
         {data.timeAgo}
       </time>
       <section
-        className="pop-post-content pop-cell"
+        className="popular-post-content popular-cell"
         style={{
           gridArea: "content",
           height: 180,
@@ -39,7 +46,7 @@ export default function PopReddPost({ data }) {
       >
         <img src={data.url} id="content-img" />
         <div className="post-info">
-          <span className="post-title"> {data.author}</span>
+          <span className="post-author">u/{data.author}</span>
           <span className="post-sub"> {data.subReddit}</span>
           {data.selftext && (
             <span className="post-more"> {data.selftext}</span>
@@ -47,27 +54,27 @@ export default function PopReddPost({ data }) {
         </div>
       </section>
 
-      <div id="upvote" className="pop-cell">
+      <div id="upvote" className="popular-cell">
         <img
           src={vote}
           style={{ transform: "rotate(180deg)", gridArea: "upvote" }}
           alt="up Vote icon"
         />
-        <span>{data.ups}</span>
+        <span>+{ups}</span>
       </div>
-      <div id="downvote" className="pop-cell">
+      <div id="downvote" className="popular-cell">
         <img style={{ gridArea: "downvote" }} src={vote} alt="down Vote icon" />
-        <span>{data.ups}</span>
+        <span>-{downs}</span>
       </div>
-      <div id="comments" className="pop-cell">
+      <div id="comments" className="popular-cell">
         <img
           style={{ gridArea: "comments" }}
           src={coments}
           alt="Comments icon"
         />
-        <span>{data.ups}</span>
+        <span>{data.numComments}</span>
       </div>
-      <div id="saved" className="pop-cell">
+      <div id="saved" className="popular-cell">
         <img
           id="saved-icon"
           style={{ gridArea: "saved" }}

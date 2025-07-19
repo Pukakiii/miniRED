@@ -1,4 +1,4 @@
-export default async function fetchPosts() {
+export default async function fetchPosts(category) {
   // helper function to convert to time ago format
   function timeAgo(timestampInSeconds) {
     const now = Date.now();
@@ -18,7 +18,7 @@ export default async function fetchPosts() {
 
   try {
     const response = await fetch(
-      "https://www.reddit.com/r/popular.json?limit=6"
+      `https://corsproxy.io/?https://www.reddit.com/r/popular/${category}.json?limit=6`
     );
     const data = await response.json();
 
@@ -36,7 +36,7 @@ export default async function fetchPosts() {
           url: child.data.url,
           timeAgo: timeAgo(child.data.created),
           selftext: child.data.selftext,
-          video: child.data.is_video ? 'Video' : false,
+          video: child.data.is_video ? "Video" : false,
           id: child.data.id,
         },
       };

@@ -2,7 +2,15 @@
 
 /* header */
 header {
-  background-color: #3c70d7;
+  background: #ed213a;
+
+  background: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0),
+    rgba(237, 33, 58, 0.5) 45%,
+    rgba(255, 90, 1, 0.5) 55%,
+    rgba(0, 0, 0, 0)
+  );
   height: 4rem;
   color: white;
   text-align: center;
@@ -11,25 +19,73 @@ header {
   align-items: center;
 }
 header form {
-  display: inline;
   position: absolute;
   left: 5%;
-  height: 1.5rem;
+  height: 1.75rem;
+  width: 4rem;
+  transition: all 0.3s ease-in;
+}
+header form:hover {
+  width: 30%;
+}
+header form input:focus {
+  outline: none;
+  border: 1px solid #ccc;
+}
+header form:focus-within {
+  width: 30%;
+  border: 0;
 }
 header form input {
   border: none;
   border-radius: 1rem;
-  width: 10rem;
+  width: 100%;
   height: 100%;
+  padding: 0 1rem;
 }
 header form button {
   position: absolute;
   right: 0;
   height: 100%;
+  width: 4rem;
   border-radius: 1rem;
+  border: 2px black dashed;
+}
+header form button:disabled {
+  cursor: pointer;
+  border: #ccc 2px dashed;
+  background-color: #f0f0f0;
+}
+header form button:active {
+  background-color: rgb(0, 136, 255);
+  cursor: pointer;
+  color: white;
+}
+.shortcut {
+  position: absolute;
+  left: 5%;
+  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+  font-size: 1rem;
+  height: 1.75rem;
+  line-height: 1.75rem;
+  color: rgb(130, 130, 130);
+  border: rgb(130, 130, 130) 1px solid;
+  border-radius: 1rem;
+  padding: 0 1rem;
 }
 header h1 {
   display: inline;
+}
+.minired-header {
+  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+  background: linear-gradient(90deg, #f093fb, #f5576c);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 6px rgba(245, 87, 108, 0.5);
+  font-weight: bolder;
+  font-size: 2.25rem;
+  -webkit-text-stroke: 0.1px rgb(0, 0, 0, 0.5);
 }
 header img {
   display: inline;
@@ -41,24 +97,89 @@ header img {
 .line {
   position: relative;
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   width: 90%;
   left: 5%;
   right: 5%;
   height: 1.75rem;
-  background-color: #427aeacf;
   border-radius: 1rem;
+  background-color: rgba(255, 44, 20, 0.5);
+  background: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0),
+    rgba(237, 33, 58, 0.5) 25%,
+    rgba(255, 90, 1, 0.5) 75%,
+    rgba(0, 0, 0, 0)
+  );
+  border: 1px solid rgb(0, 0, 0, 0.2);
+}
+.filter {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  height: 100%;
+  width: 33%;
+  border: 1px solid rgb(0, 0, 0, 0.2);
+  border-radius: 1rem;
+  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+}
+.filter a {
+  font-weight: 500;
+  color: rgba(255, 255, 255);
+  text-decoration: none;
+  height: 100%;
+  border-radius: 1rem;
+  line-height: 1.75rem;
+  padding: 0 1rem;
+  background-color: rgba(0, 0, 0, 0.25);
+}
+.filter a:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+}
+.filter a:active {
+  background-color: rgba(0, 76, 255, 0.5);
+}
+.filter .activated {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+#about {
+  height: 100%;
+  border: 1px solid rgb(0, 0, 0, 0.2);
+  border-radius: 1rem;
+  display: flex;
+  align-items: center;
+  margin-left: 1rem;
+}
+#about a {
+  /* height: 100%; */
+  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+  padding: 0 1rem;
+  background: linear-gradient(90deg, #fa4949, #b50018);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 500;
+  border-radius: 1rem;
+  text-decoration: underline;
+  line-height: 2rem;
+}
+#about:hover {
+  background-color: whitesmoke;
+  cursor: pointer;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 /* navbar */
 nav {
-  background-color: rgba(0, 0, 0, 0.2);
+  background-color: rgba(255, 0, 0, 0.2);
   height: 77px;
   position: absolute;
   width: 90%;
   bottom: 2rem;
   left: 5%;
   border-radius: 50px;
+  z-index: 1000;
 }
 nav ul {
   display: flex;
@@ -78,6 +199,7 @@ nav ul li img {
   vertical-align: middle;
   width: auto;
   height: 4rem;
+  width: 4rem;
   cursor: pointer;
 }
 
@@ -99,6 +221,8 @@ nav ul li img {
 .posts::-webkit-scrollbar {
   display: none;
 }
+
+/* pop-post */
 .post {
   display: grid;
   grid-template-rows: 1fr auto 2fr;
@@ -109,7 +233,7 @@ nav ul li img {
     "upvote downvote comments saved";
   align-items: center;
   justify-items: center;
-  background-color: rgb(229, 229, 229);
+  /* background-color: rgb(229, 229, 229); */
   border: 1px solid #ccc;
   border-radius: 50px;
   padding: 0.5rem;
@@ -124,17 +248,14 @@ nav ul li img {
   font-size: 14px;
   font-weight: 500;
 }
-.pop-cell {
-}
-
-#pop-post-title-box {
+#popular-post-title-box {
   align-self: start;
   justify-self: start;
   width: 100%;
   height: 100%;
   align-self: center;
 }
-#pop-post-title {
+#popular-post-title {
   text-indent: 2rem;
   font-size: 16px;
   font-weight: 500;
@@ -173,30 +294,39 @@ nav ul li img {
 .post-info {
   position: absolute;
   top: 1rem;
+  max-height: 1.5rem;
   display: flex;
   justify-content: space-between;
-  left: 1.5rem;
-  right: 1.5rem;
+  left: 0rem;
+  right: 0rem;
   z-index: 2;
   color: rgb(0, 0, 0);
   background: rgba(255, 255, 255, 0.5);
-  padding: 0.25rem 0.5rem;
-  border-radius: 4px;
+  /* padding: 0.25rem 1.5rem; */
   margin: 0;
   font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
   font-weight: normal;
 }
 .post-info span {
-  margin: 0 0.5rem;
+  margin: 0 0.25rem;
+  text-overflow: ellipsis;
+  line-height: 1.5rem;
+  overflow: hidden;
+  white-space: nowrap;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  border-radius: 4px;
+  padding: 0 0.25rem;
 }
 .post-info .post-more {
   text-overflow: ellipsis;
   padding: 0 0.5rem;
   overflow: hidden;
   white-space: nowrap;
-  margin: 0 1rem;
   border-radius: 4px;
   background-color: rgb(229, 229, 229, 0.8);
+  max-width: 35%;
+  color: #000;
 }
 
 #upvote,
@@ -210,8 +340,13 @@ nav ul li img {
   align-items: start;
   flex-direction: column;
 }
+#upvote img,
+#downvote img,
+#comments img {
+  height: 2rem;
+}
 #saved {
-  height: 80%;
+  height: 2rem;
   justify-self: end;
   align-self: baseline;
   margin-right: 2rem;
