@@ -22,25 +22,28 @@ export default async function fetchPosts(category) {
     );
     const data = await response.json();
 
-    return data.data.children.map((child) => {
-      return {
-        [child.data.id]: {
-          subReddit: child.data.subreddit_name_prefixed,
-          title: child.data.title,
-          author: child.data.author,
-          created: child.data.created,
-          ups: child.data.ups,
-          ratio: child.data.upvote_ratio,
-          numComments: child.data.num_comments,
-          thumbnail: child.data.thumbnail,
-          url: child.data.url,
-          timeAgo: timeAgo(child.data.created),
-          selftext: child.data.selftext,
-          video: child.data.is_video ? "Video" : false,
-          id: child.data.id,
-        },
-      };
-    });
+    return {
+      posts: data.data.children.map((child) => {
+        return {
+          [child.data.id]: {
+            subReddit: child.data.subreddit_name_prefixed,
+            title: child.data.title,
+            author: child.data.author,
+            created: child.data.created,
+            ups: child.data.ups,
+            ratio: child.data.upvote_ratio,
+            numComments: child.data.num_comments,
+            thumbnail: child.data.thumbnail,
+            url: child.data.url,
+            timeAgo: timeAgo(child.data.created),
+            selftext: child.data.selftext,
+            video: child.data.is_video ? "Video" : false,
+            id: child.data.id,
+          },
+        };
+      }),
+      numPosts: data.data.dist
+    };
   } catch (error) {
     console.error("Failed to fetch posts:", error);
   }

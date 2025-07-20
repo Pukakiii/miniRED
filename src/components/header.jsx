@@ -4,7 +4,8 @@ import { useLocation } from "react-router-dom";
 export default function Header() {
   const location = useLocation();
   const isPopularPage = location.pathname.includes("/popular");
-  function pageHeader() {
+  console.log("Header location:", location.pathname);
+  function pageHeaderTitle() {
     if (location.pathname === "/") {
       return "MINI red";
     } else if (location.pathname === "/main") {
@@ -15,20 +16,27 @@ export default function Header() {
       return "Unknown Page";
     }
   }
-  return (
-    <header>
-      {location.pathname !== "/" && !isPopularPage ? (
+
+  function pageHeaderFeature() {
+    if (location.pathname !== "/" && !isPopularPage) {
+      return (
         <form className="search-form">
           <input type="text" placeholder="r/Animals..." />
-          <button type="submit">
-            Search
-          </button>
+          <button type="submit">Search</button>
         </form>
-      ) : (
-        <span className="shortcut">Press to find Ctrl + f / Cmd + f</span>
-      )}
+      );
+    } else if (location.pathname === "/") {
+      return <span className="header-helper">Choose your page</span>;
+    } else {
+      return <span className="shortcut">Press to find Ctrl + f / Cmd + f</span>;
+    }
+  }
+
+  return (
+    <header>
+      {pageHeaderFeature()}
       <h1 className={location.pathname === "/" ? "minired-header" : ""}>
-        {pageHeader()}
+        {pageHeaderTitle()}
       </h1>
       <img
         style={{ height: 35, borderRadius: 5, border: "2px solid #ccc" }}
@@ -37,4 +45,17 @@ export default function Header() {
       />
     </header>
   );
+}
+
+function pageHeaderFeature() {
+  {
+    location.pathname !== "/" && !isPopularPage ? (
+      <form className="search-form">
+        <input type="text" placeholder="r/Animals..." />
+        <button type="submit">Search</button>
+      </form>
+    ) : (
+      <span className="shortcut">Press to find Ctrl + f / Cmd + f</span>
+    );
+  }
 }

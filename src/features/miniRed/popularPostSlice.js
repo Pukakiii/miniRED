@@ -10,11 +10,12 @@ export const fetchPostsThunk = createAsyncThunk(
   }
 );
 
-export const miniRedSlice = createSlice({
+export const popularPostSlice = createSlice({
   name: "posts",
   initialState: {
     posts: {
       data: [],
+      numPosts: 0,
       loading: false,
       error: false,
     },
@@ -27,8 +28,11 @@ export const miniRedSlice = createSlice({
         state.posts.error = false;
       })
       .addCase(fetchPostsThunk.fulfilled, (state, action) => {
-        state.posts.data = action.payload;
+        const { posts, numPosts } = action.payload;
+        state.posts.data = posts;
+        state.posts.numPosts = numPosts;
         console.log("Reducer state:", state.posts.data);
+        console.log("Reducer state:", state.posts.numPosts);
         localStorage.setItem("popposts", JSON.stringify(action.payload));
         state.posts.loading = false;
         state.posts.error = false;
@@ -40,6 +44,6 @@ export const miniRedSlice = createSlice({
   },
 });
 
-export default miniRedSlice.reducer;
+export default popularPostSlice.reducer;
 
-// export const {  } = miniRedSlice.actions;
+// export const {  } = popularPostSlice.actions;

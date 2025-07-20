@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchPostsThunk } from "../features/miniRed/miniRedSlice.js";
+import { fetchPostsThunk } from "../features/miniRed/popularPostSlice.js";
 import PopPost from "./popularPost.jsx";
 
 export default function Posts() {
@@ -10,7 +10,7 @@ export default function Posts() {
   const posts = useSelector((state) => state.posts.posts.data);
 
   // console.log("Posts component rendered with location:", location.pathname);
-  const category = location.pathname.split("/")[2] || ""; 
+  const category = location.pathname.split("/")[2] || "";
   // console.log("Category derived from location:", category);
   function createPopPostCards() {
     return posts?.map((post) => {
@@ -29,7 +29,6 @@ export default function Posts() {
         payload: parsedPosts,
       });
     } else {
-      
       dispatch(fetchPostsThunk(category));
     }
   }, [location.pathname]);
