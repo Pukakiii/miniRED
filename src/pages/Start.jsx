@@ -10,7 +10,7 @@ export default function Start() {
     <>
       <Header />
       <div className="start-nav">
-        <Link to="/main">
+        <Link to="/subreddit">
           <img
             style={{ height: "100px", width: "100px" }}
             src={mainIcon}

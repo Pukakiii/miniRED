@@ -1,7 +1,10 @@
 import { useLocation, Link, NavLink } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+
 export default function CategoryLine() {
   const numPosts = useSelector((state) => state.posts.posts.numPosts);
+  const location = useLocation();
+  
   let checkPoints = Math.floor(numPosts / 5);
 
   function createCheckPoints() {
@@ -16,28 +19,28 @@ export default function CategoryLine() {
     return checkPointsArray;
   }
 
+  function createCategoryLinks() {
+    if (location.pathname.includes("popular")) {
+      const categories = ["new", "hot", "best"];
+      return categories.map((category) => (
+        <NavLink
+          key={category}
+          className={({ isActive }) => (isActive ? "activated" : undefined)}
+          to={`/popular/${category}`}
+        >
+          {category.charAt(0).toUpperCase() + category.slice(1)}
+        </NavLink>
+      ));
+    } else if (location.pathname.includes("subreddit")) {
+
+    }
+  }
+
   return (
     <>
       <section className="line">
         <div className="filter">
-          <NavLink
-            className={({ isActive }) => (isActive ? "activated" : undefined)}
-            to="/popular/new"
-          >
-            New
-          </NavLink>
-          <NavLink
-            className={({ isActive }) => (isActive ? "activated" : undefined)}
-            to="/popular/hot"
-          >
-            Hot
-          </NavLink>
-          <NavLink
-            className={({ isActive }) => (isActive ? "activated" : undefined)}
-            to="/popular/best"
-          >
-            Best
-          </NavLink>
+          {createCategoryLinks()}
         </div>
         <div className="feed-marker">
           <span>Jump to:</span>

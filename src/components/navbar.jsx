@@ -4,6 +4,7 @@ import refresh from "../assets/navbar/refresh.svg";
 import main from "../assets/navbar/main.svg";
 import setting from "../assets/navbar/settings.svg";
 import saved from "../assets/navbar/saved-menu.svg";
+
 export default function Navbar() {
   return (
     <nav className="navbar">
@@ -19,7 +20,7 @@ export default function Navbar() {
           </NavLink>
         </li>
         <li>
-          <NavLink to="/main">
+          <NavLink to="/subreddit">
             <img src={main} alt="main" />
           </NavLink>
         </li>
