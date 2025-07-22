@@ -1,6 +1,5 @@
 import { useLocation, Link, NavLink } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-
 export default function CategoryLine() {
   const numPosts = useSelector((state) => state.posts.posts.numPosts);
   let checkPoints = Math.floor(numPosts / 5);
@@ -8,10 +7,15 @@ export default function CategoryLine() {
   function createCheckPoints() {
     const checkPointsArray = [];
     for (let i = 0; i <= checkPoints; i++) {
-      checkPointsArray.push(<Link key={i} className="points">{i*5}</Link>);
+      checkPointsArray.push(
+        <a href={`#anchor-${i * 5}`} key={i} className="points">
+          {i * 5}
+        </a>
+      );
     }
     return checkPointsArray;
   }
+
   return (
     <>
       <section className="line">

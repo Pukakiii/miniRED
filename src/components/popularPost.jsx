@@ -2,18 +2,18 @@ import coments from "../assets/comments.svg";
 import vote from "../assets/vote.svg";
 import saved from "../assets/navbar/saved-menu.svg";
 
-export default function PopPost({ data }) {
+export default function PopPost({ data, index }) {
   const numDownvotes = (score, ratio) => {
     const ups = Math.round((score * ratio) / (2 * ratio - 1));
     const downs = ups - score;
     return { ups, downs };
   };
   const { ups, downs } = numDownvotes(data.ups, data.ratio);
-  // console.log("data:", data);
+  console.log("data:", data, "index:", index);
   // console.log("obj urls:", data.url);
 
   return (
-    <article className="post">
+    <article id={`anchor-${index}`} className="post">
       <div
         id="popular-post-title-box"
         className="popular-post-title popular-cell"

@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchPostsThunk } from "../features/miniRed/popularPostSlice.js";
 import PopPost from "./popularPost.jsx";
 
-export default function Posts() {
+export default function Posts({ jumpToRef }) {
   const location = useLocation();
   const dispatch = useDispatch();
   const posts = useSelector((state) => state.posts.posts.data);
@@ -13,9 +13,9 @@ export default function Posts() {
   const category = location.pathname.split("/")[2] || "";
   // console.log("Category derived from location:", category);
   function createPopPostCards() {
-    return posts?.map((post) => {
+    return posts?.map((post, index) => {
       const [id, data] = Object.entries(post)[0];
-      return <PopPost key={id} data={data} />;
+      return <PopPost index={index} key={id} data={data} />;
     });
   }
 

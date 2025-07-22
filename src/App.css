@@ -168,10 +168,12 @@ header img {
   border-radius: 1rem;
 }
 .feed-marker span {
+  text-align: center;
   padding: 0 1rem;
-  font-weight: 500;
+  font-weight: 700;
   line-height: 1.75rem;
   height: 100%;
+  min-width: 100px;
   background-color: rgba(0, 0, 0, 0.5);
   border-radius: 1rem;
 }
@@ -181,16 +183,16 @@ header img {
   align-items: center;
   justify-content: start;
   height: 100%;
-  width: 80%;
+  width: 100%;
   border-radius: 1rem;
   /* border: #b50018 1px solid; */
   overflow: hidden;
   overflow-x: scroll;
-  padding: 2px 0;
+  padding: 1px 0;
 }
 #checkpoints::-webkit-scrollbar {
-  height: 2px; /* Very thin */
-  width: 1px; /* Very thin */
+  height: 1px; 
+  width: 1px; 
 }
 
 #checkpoints::-webkit-scrollbar-track {
@@ -287,6 +289,7 @@ nav ul li img {
   margin: 0 auto;
   max-height: 27.3rem;
   overflow: scroll;
+  scroll-behavior: smooth;
   overflow-x: hidden;
   scrollbar-width: 0;
   row-gap: 1.5rem;
