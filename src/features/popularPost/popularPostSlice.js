@@ -1,17 +1,17 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import fetchPosts from "../../api/postsAPI.js";
+import { fetchPopPosts } from "../../api/postsAPI.js";
 
 export const fetchPostsThunk = createAsyncThunk(
-  "posts/fetchPostsThunk",
+  "popular/fetchPostsThunk",
   async (category) => {
-    const response = await fetchPosts(category);
+    const response = await fetchPopPosts(category);
     console.log("Fetched posts:", response);
     return response;
   }
 );
 
 export const popularPostSlice = createSlice({
-  name: "posts",
+  name: "popular",
   initialState: {
     posts: {
       data: [],

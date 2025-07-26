@@ -1,8 +1,9 @@
 import { configureStore } from "@reduxjs/toolkit";
-import postsReducer from "../features/popularPost/popularPostSlice.js";
-
+import popPostsReducer from "../features/popularPost/popularPostSlice.js";
+import subRedditReducer from "../features/subreddit/subredditPostSlice.js";
 export const store = configureStore({
   reducer: {
-    posts: postsReducer,
+    popular: popPostsReducer,
+    subreddit: subRedditReducer,
   },
 });

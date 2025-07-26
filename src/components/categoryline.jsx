@@ -1,10 +1,18 @@
-import { useLocation, Link, NavLink } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-
+import { useLocation, NavLink } from "react-router-dom";
+import { useSelector } from "react-redux";
 export default function CategoryLine() {
-  const numPosts = useSelector((state) => state.posts.posts.numPosts);
   const location = useLocation();
   
+  const numPosts = useSelector((state) => {
+    if (location.pathname.includes("popular")) {
+      return state.popular.posts.numPosts;
+    } else if (location.pathname.includes("subreddit")) {
+      return state.subreddit.posts.numPosts;
+    }
+  });
+
+  const linkFlairs = useSelector((state) => state.subreddit.subInfo.data);
+
   let checkPoints = Math.floor(numPosts / 5);
 
   function createCheckPoints() {
@@ -32,16 +40,22 @@ export default function CategoryLine() {
         </NavLink>
       ));
     } else if (location.pathname.includes("subreddit")) {
-
+      return linkFlairs.map((flair, i) => (
+        <NavLink
+          className={({ isActive }) => (isActive ? "activated" : undefined)}
+          to={`/popular/${flair}`}
+          key={i}
+        >
+          {flair}
+        </NavLink>
+      ));
     }
   }
 
   return (
     <>
       <section className="line">
-        <div className="filter">
-          {createCategoryLinks()}
-        </div>
+        <div className="filter">{createCategoryLinks()}</div>
         <div className="feed-marker">
           <span>Jump to:</span>
           <div id="checkpoints">{createCheckPoints()}</div>

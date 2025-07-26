@@ -151,12 +151,17 @@ header img {
   display: flex;
   align-items: center;
   justify-content: space-evenly;
+  position: relative;
   height: 100%;
   width: 33%;
   border: 1px solid rgb(0, 0, 0, 0.2);
   border-radius: 1rem;
   font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+  overflow: scroll;
+  overflow-y: hidden;
+  background: linear-gradient(to right, transparent 80%, rgba(0, 0, 0, 0.5));
 }
+
 .filter a {
   font-weight: 500;
   color: rgba(255, 255, 255);
@@ -165,7 +170,15 @@ header img {
   border-radius: 1rem;
   line-height: 1.75rem;
   padding: 0 1rem;
+  margin: 0 0.5rem;
   background-color: rgba(0, 0, 0, 0.25);
+}
+.filter a:last-of-type {
+  margin-right: 0;
+}
+
+.filter a:first-of-type {
+  margin-left: 0;
 }
 .filter a:hover {
   background-color: rgba(0, 0, 0, 0.1);
@@ -176,6 +189,9 @@ header img {
 }
 .filter .activated {
   background-color: rgba(0, 0, 0, 0.5);
+}
+.filter::-webkit-scrollbar {
+  display: none;
 }
 .feed-marker {
   display: flex;
@@ -207,7 +223,6 @@ header img {
   height: 100%;
   width: 100%;
   border-radius: 1rem;
-  /* border: #b50018 1px solid; */
   overflow: hidden;
   overflow-x: scroll;
   padding: 1px 0;
