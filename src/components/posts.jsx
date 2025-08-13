@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
 import { useLocation, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchPopPostsThunk, setPopPosts } from "../features/popularPost/popularPostSlice.js";
+import {
+  fetchPopPostsThunk,
+  setPopPosts,
+} from "../features/popularPost/popularPostSlice.js";
 import { setSubPosts } from "../features/subreddit/subredditPostSlice.js";
-import PopPost from "./postCard.jsx";
+import Post from "./postCard.jsx";
 
 export default function Posts() {
   const location = useLocation();
@@ -32,11 +35,11 @@ export default function Posts() {
   // load posts
   useEffect(() => {
     if (page === "popular") {
-      const popPosts = JSON.parse(localStorage.getItem('popular'));
+      const popPosts = JSON.parse(localStorage.getItem("popular"));
       dispatch(fetchPopPostsThunk(category));
     }
-    if (page === "subreddit" && category && postsArr.length===0) {
-      const subPosts = JSON.parse(localStorage.getItem('subreddit'))
+    if (page === "subreddit" && category && postsArr.length === 0) {
+      const subPosts = JSON.parse(localStorage.getItem("subreddit"));
       dispatch(setSubPosts(subPosts));
     }
   }, [location.pathname, dispatch]);
@@ -68,7 +71,7 @@ export default function Posts() {
   function createPostCards() {
     return filteredPosts.map((post, index) => {
       const [id, data] = Object.entries(post)[0];
-      return <PopPost index={index} key={id} data={data} />;
+      return <Post index={index} key={id} data={data} />;
     });
   }
 

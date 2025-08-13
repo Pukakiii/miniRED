@@ -2,9 +2,11 @@ import coments from "../assets/comments.svg";
 import vote from "../assets/vote.svg";
 import saved from "../assets/navbar/saved-menu.svg";
 
-export default function PopPost({ data, index }) {
-  
-  
+export default function Post({ data, index }) {
+  const isEveryFifthIndex = (i) => {
+    return i === 0 ? true : (i + 1) % 5 === 0;
+  };
+
   const numDownvotes = (score, ratio) => {
     if (score === 0 || ratio === 0.5) {
       return { ups: 0, downs: 0 };
@@ -14,8 +16,8 @@ export default function PopPost({ data, index }) {
     return { ups, downs };
   };
   const { ups, downs } = numDownvotes(data.ups, data.ratio);
-  console.log("ups", ups, "downs", downs);
-  // console.log("obj urls:", data.url);
+  // console.log("ups", ups, "downs", downs);
+  // console.log("ind:", index, data.title, isEveryFifthIndex(index));
 
   return (
     <article id={`anchor-${index}`} className="post">
@@ -84,6 +86,7 @@ export default function PopPost({ data, index }) {
         />
         <span>{}</span>
       </div>
+      {isEveryFifthIndex(index) && <div className="anchor">{index+1}</div>}
     </article>
   );
 }
