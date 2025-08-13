@@ -1,4 +1,4 @@
-export async function fetchPopPosts(category) {
+export async function fetchPopPosts(category = 'best') {
   // helper function to convert to time ago format
   function timeAgo(timestampInSeconds) {
     const now = Date.now();
@@ -94,6 +94,7 @@ export async function fetchSubrredit(subName) {
             selftext: child.data.selftext,
             video: child.data.is_video ? "Video" : false,
             id: child.data.id,
+            category: child.data.link_flair_text
           },
         };
       }),

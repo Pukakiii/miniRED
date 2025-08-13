@@ -1,17 +1,44 @@
 import logo from "../assets/minired-logo.png";
-import { useLocation } from "react-router-dom";
+import { useNavigate, useLocation, useParams } from "react-router-dom";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { fetchSubThunk } from "../features/subreddit/subredditPostSlice";
+
 export default function Header() {
   const [showHint, setShowHint] = useState(true);
   const location = useLocation();
-  
+  const params = useParams();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const isPopularPage = location.pathname.includes("/popular");
-  
+  const isSubreddit = location.pathname.includes("/subreddit");
+  console.log(params);
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    setShowHint(false);
+
+    const input = e.target.querySelector("input");
+    const formData = new FormData(e.target);
+    const value = formData.get("sub");
+
+    dispatch(fetchSubThunk(value))
+    
+    console.log(formData);
+    console.log(value);
+    console.log(location);
+    console.log(e);
+    
+    input.value = "";
+    navigate(`/subreddit/${value}`);
+  }
+
   function pageHeaderTitle() {
     if (location.pathname === "/") {
       return "MINI red";
-    } else if (location.pathname === "/subreddit") {
-      return "r/";
+    } else if (isSubreddit) {
+      return `r/${params.name ? params.name : ""}`;
     } else if (isPopularPage) {
       return "r/Popular";
     } else {
@@ -22,14 +49,12 @@ export default function Header() {
   function pageHeaderFeature() {
     if (location.pathname !== "/" && !isPopularPage) {
       return (
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            setShowHint(false);
-          }}
-          className="search-form"
-        >
-          <input type="text" placeholder="Animals, playboi carti, AI" />
+        <form onSubmit={handleSubmit} className="search-form">
+          <input
+            name="sub"
+            type="text"
+            placeholder="Animals, playboi carti, AI"
+          />
           <button type="submit">Search</button>
           {showHint && <span>⬅ find your sub</span>}{" "}
         </form>
@@ -55,5 +80,3 @@ export default function Header() {
     </header>
   );
 }
-
-

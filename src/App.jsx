@@ -11,6 +11,8 @@ function App() {
       <Routes>
         <Route path="/" element={<Start />} />
         <Route path="subreddit" element={<Subreddit />} />
+        <Route path="subreddit/:name" element={<Subreddit />} />
+        <Route path="subreddit/:name/:flair" element={<Subreddit />} />
         <Route path="popular" element={<Popular />} />
         <Route path="popular/new" element={<Popular />} />
         <Route path="popular/hot" element={<Popular />} />

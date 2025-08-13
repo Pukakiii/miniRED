@@ -25,7 +25,15 @@ export const subRedditSlice = createSlice({
       error: false,
     },
   },
-  reducers: {},
+  reducers: {
+    setSubPosts(state, action) {
+      const { posts, numPosts, linkFlairs } = action.payload;
+      state.posts.data = posts;
+      state.posts.numPosts = numPosts;
+      state.subInfo.data = linkFlairs;
+
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchSubThunk.pending, (state) => {
@@ -40,7 +48,7 @@ export const subRedditSlice = createSlice({
         console.log("Reducer state:", state.posts.data);
         console.log("Reducer state n:", state.posts.numPosts);
         console.log("Reducer sub info:", state.subInfo.data);
-        localStorage.setItem("subposts", JSON.stringify(action.payload));
+        localStorage.setItem("subreddit", JSON.stringify(action.payload));
         state.posts.loading = false;
         state.posts.error = false;
       })
@@ -53,4 +61,4 @@ export const subRedditSlice = createSlice({
 
 export default subRedditSlice.reducer;
 
-// export const {  } = popularPostSlice.actions;
+export const { setSubPosts } = subRedditSlice.actions;

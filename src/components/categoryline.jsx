@@ -1,8 +1,9 @@
-import { useLocation, NavLink } from "react-router-dom";
+import { useParams, useLocation, NavLink } from "react-router-dom";
 import { useSelector } from "react-redux";
 export default function CategoryLine() {
   const location = useLocation();
-  
+  const params = useParams();
+
   const numPosts = useSelector((state) => {
     if (location.pathname.includes("popular")) {
       return state.popular.posts.numPosts;
@@ -40,15 +41,22 @@ export default function CategoryLine() {
         </NavLink>
       ));
     } else if (location.pathname.includes("subreddit")) {
-      return linkFlairs.map((flair, i) => (
-        <NavLink
-          className={({ isActive }) => (isActive ? "activated" : undefined)}
-          to={`/popular/${flair}`}
-          key={i}
-        >
-          {flair}
-        </NavLink>
-      ));
+      return linkFlairs[0] ? (
+        <>
+          <NavLink to={`/subreddit/${params.name}`}>All</NavLink>
+          {linkFlairs.map((flair, i) => (
+            <NavLink
+              key={i}
+              to={`/subreddit/${params.name}/${flair}`}
+              className={({ isActive }) => (isActive ? "activated" : undefined)}
+            >
+              {flair}
+            </NavLink>
+          ))}
+        </>
+      ) : (
+        <p style={{ color: "rgba(0, 0, 0, 0.5)" }}>no categories here</p>
+      );
     }
   }
 
