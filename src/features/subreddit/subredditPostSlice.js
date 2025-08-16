@@ -3,10 +3,22 @@ import { fetchPopPosts, fetchSubrredit } from "../../api/postsAPI.js";
 
 export const fetchSubThunk = createAsyncThunk(
   "subreddit/fetchSubThunk",
-  async (subName) => {
-    const response = await fetchSubrredit(subName);
-    console.log("Fetched sub:", response);
-    return response;
+  async (subName, { rejectWithValue }) => {
+    try {
+      const response = await fetchSubrredit(subName);
+
+      // Check if the response is an error
+      if (response.error) {
+        // Pass custom error payload
+        return rejectWithValue(response);
+      }
+
+      console.log("Fetched sub:", response);
+      return response;
+    } catch (error) {
+      // This handles network errors
+      return rejectWithValue({ message: error.message });
+    }
   }
 );
 
@@ -31,7 +43,6 @@ export const subRedditSlice = createSlice({
       state.posts.data = posts;
       state.posts.numPosts = numPosts;
       state.subInfo.data = linkFlairs;
-
     },
   },
   extraReducers: (builder) => {

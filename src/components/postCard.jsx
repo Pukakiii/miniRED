@@ -1,6 +1,7 @@
 import coments from "../assets/comments.svg";
 import vote from "../assets/vote.svg";
 import saved from "../assets/navbar/saved-menu.svg";
+import BigPost from "./bigPostCard.jsx";
 
 export default function Post({ data, index }) {
   const isEveryFifthIndex = (i) => {
@@ -22,12 +23,12 @@ export default function Post({ data, index }) {
   return (
     <article id={`anchor-${index}`} className="post">
       <div
-        id="popular-post-title-box"
-        className="popular-post-title popular-cell"
+        id="post-title-box"
+        className="post-title popular-cell"
         style={{ gridArea: "title" }}
       >
         <h3
-          id="popular-post-title"
+          id="post-title"
           className="popular-cell"
           style={{ gridArea: "title" }}
         >
@@ -38,7 +39,7 @@ export default function Post({ data, index }) {
         {data.timeAgo}
       </time>
       <section
-        className="popular-post-content popular-cell"
+        className="post-content popular-cell"
         style={{
           gridArea: "content",
           height: 180,
@@ -86,7 +87,9 @@ export default function Post({ data, index }) {
         />
         <span>{}</span>
       </div>
-      {isEveryFifthIndex(index) && <div className="anchor">{index+1}</div>}
+      {isEveryFifthIndex(index) && <div className="anchor">{index + 1}</div>}
+      { <BigPost data={data} index={index} />}
     </article>
+    // temporary
   );
 }

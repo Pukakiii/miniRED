@@ -1,4 +1,4 @@
-export async function fetchPopPosts(category = 'best') {
+export async function fetchPopPosts(category = "best") {
   // helper function to convert to time ago format
   function timeAgo(timestampInSeconds) {
     const now = Date.now();
@@ -71,6 +71,9 @@ export async function fetchSubrredit(subName) {
     const response = await fetch(
       `https://corsproxy.io/?https://www.reddit.com/r/${subName}/new.json?limit=6`
     );
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
     const postsData = await response.json();
     console.log("Fetched subposts:", postsData);
     const linkFlairs = [];
@@ -94,7 +97,7 @@ export async function fetchSubrredit(subName) {
             selftext: child.data.selftext,
             video: child.data.is_video ? "Video" : false,
             id: child.data.id,
-            category: child.data.link_flair_text
+            category: child.data.link_flair_text,
           },
         };
       }),

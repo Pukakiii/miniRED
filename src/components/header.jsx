@@ -21,12 +21,12 @@ export default function Header() {
 
     const input = e.target.querySelector("input");
     const formData = new FormData(e.target);
-    const value = formData.get("sub");
+    const value = formData.get("sub").replace(/\s+/g, "");
 
     dispatch(fetchSubThunk(value))
     
     console.log(formData);
-    console.log(value);
+    console.log('VALUE', value);
     console.log(location);
     console.log(e);
     
