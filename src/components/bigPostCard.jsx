@@ -1,12 +1,9 @@
+import React from "react";
 import coments from "../assets/comments.svg";
 import vote from "../assets/vote.svg";
 import saved from "../assets/navbar/saved-menu.svg";
 
-export default function BigPost({ data, index }) {
-  // const isEveryFifthIndex = (i) => {
-  //   return i === 0 ? true : (i + 1) % 5 === 0;
-  // };
-  console.log("BigPost data:", data);
+export default function BigPost({ data, index, handleClick, big }) {
   const numDownvotes = (score, ratio) => {
     if (score === 0 || ratio === 0.5) {
       return { ups: 0, downs: 0 };
@@ -16,49 +13,49 @@ export default function BigPost({ data, index }) {
     return { ups, downs };
   };
   const { ups, downs } = numDownvotes(data.ups, data.ratio);
-  // console.log("ups", ups, "downs", downs);
-  // console.log("ind:", index, data.title, isEveryFifthIndex(index));
+  console.log(big);
 
   return (
-    index === 4 && (
-      <article id={`anchor-${index}`} className="big post">
-        <div
-          id="post-title-box"
-          className="post-title popular-cell"
-          style={{ gridArea: "title" }}
-        >
-          <h3
-            id="post-title"
-            className="popular-cell"
-            style={{ gridArea: "title" }}
-          >
-            {data.title}
-          </h3>
-        </div>
-        <time id="time" className="popular-cell" style={{ gridArea: "time" }}>
-          {data.timeAgo}
-        </time>
-        <section
-          className="post-content popular-cell"
-          style={{
-            gridArea: "content",
-            height: 180,
-            width: "100%",
-            position: "relative",
-            overflow: "hidden",
-          }}
-        >
-          <img src={data.url} id="content-img" />
-          <div className="post-info">
-            <span className="post-author">u/{data.author}</span>
-            <span className="post-sub"> {data.subReddit}</span>
-            {data.selftext && (
-              <span className="post-more"> {data.selftext}</span>
-            )}{" "}
-          </div>
-        </section>
+    <article
+      id={`anchor-${index}`}
+      className="big-post"
+      // style={{ display: big ? "grid" : "none" }}
+    >
+      <div style={{ gridArea: "big-Info" }} className="big-post-info">
+        <span className="big-post-author">u/{data.author}</span>
+        <button onClick={handleClick} id="close">✖</button>
+        <span className="big-post-sub"> {data.subReddit}</span>
+      </div>
+      <div
+        id="big-post-title-box"
+        className="big-post-title"
+        style={{ gridArea: "big-title" }}
+      >
+        <h3>{data.title}</h3>
+      </div>
+      <time id="time" style={{ gridArea: "time" }}>
+        {data.timeAgo}
+      </time>
+      {data.selftext && (
+        <span style={{ gridArea: "selftext" }} className="big-post-more">
+          {" "}
+          {data.selftext}
+        </span>
+      )}
+      <section
+        className="big-post-content"
+        style={{
+          gridArea: "big-content",
+          width: "100%",
+          position: "relative",
+          overflow: "hidden",
+        }}
+      >
+        <img src={data.url} id="content-img" />
+      </section>
 
-        <div id="upvote" className="popular-cell">
+      <div className="big-post-stats" style={{ gridArea: "stats" }}>
+        <div id="upvote">
           <img
             src={vote}
             style={{ transform: "rotate(180deg)", gridArea: "upvote" }}
@@ -66,33 +63,19 @@ export default function BigPost({ data, index }) {
           />
           <span>+{ups}</span>
         </div>
-        <div id="downvote" className="popular-cell">
-          <img
-            style={{ gridArea: "downvote" }}
-            src={vote}
-            alt="down Vote icon"
-          />
+        <div id="downvote">
+          <img src={vote} alt="down Vote icon" />
           <span>-{downs}</span>
         </div>
-        <div id="comments" className="popular-cell">
-          <img
-            style={{ gridArea: "comments" }}
-            src={coments}
-            alt="Comments icon"
-          />
+        <div id="comments">
+          <img src={coments} alt="Comments icon" />
           <span>{data.numComments}</span>
         </div>
-        <div id="saved" className="popular-cell">
-          <img
-            id="saved-icon"
-            style={{ gridArea: "saved" }}
-            src={saved}
-            alt="Saved icon"
-          />
+        <div id="saved">
+          <img id="saved-icon" src={saved} alt="Saved icon" />
           <span>{}</span>
         </div>
-        {/* {isEveryFifthIndex(index) && <div className="anchor">{index + 1}</div>} */}
-      </article>
-    )
+      </div>
+    </article>
   );
 }
