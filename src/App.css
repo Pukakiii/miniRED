@@ -422,7 +422,7 @@ nav ul li img {
   width: 100%;
   border-bottom: black 1px solid;
 }
-#content-img {
+#post-media {
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -472,7 +472,6 @@ nav ul li img {
 #upvote,
 #downvote,
 #comments {
-  cursor: pointer;
   justify-self: baseline;
   margin-left: 2rem;
   /* height: 2.5rem; */
@@ -566,11 +565,25 @@ nav ul li img {
   justify-self: start;
   width: 130%;
   height: 100%;
+  max-height: 4rem;
+  z-index: 10;
   overflow: auto;
   text-overflow: clip;
   white-space: wrap;
 }
+.big-post-title::-webkit-scrollbar {
+  height: 1px;
+  width: 2px;
+}
 
+.big-post-title::-webkit-scrollbar-track {
+  background: transparent; /* No visible track */
+}
+
+.big-post-title::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.3); /* Faint dark thumb */
+  border-radius: 10px;
+}
 .big-post #time {
   grid-area: time;
   font-style: italic;
@@ -585,6 +598,7 @@ nav ul li img {
 .big-post-more {
   max-height: 3.5rem;
   overflow: auto;
+  width: 100%;
   font-size: 16px;
   /* border: #000  1px solid; */
   background: linear-gradient(
@@ -608,7 +622,7 @@ nav ul li img {
   background-color: rgba(0, 0, 0, 0.3); /* Faint dark thumb */
   border-radius: 10px;
 }
-.big-post #content-img {
+.big-post #post-media {
   width: 100%;
   min-height: 14rem;
   height: 14rem;
@@ -628,7 +642,6 @@ nav ul li img {
 .big #upvote,
 .big #downvote,
 .big #comments {
-  cursor: pointer;
   justify-self: baseline;
   margin-left: 2rem;
   display: flex;
@@ -660,6 +673,76 @@ nav ul li img {
   color: rgb(130, 130, 130);
   border-radius: 4px;
   text-decoration: none;
+}
+/* GALLERY SWIPE */
+.gallery-container {
+  position: relative;
+  width: 100%;
+  max-width: 600px; /* match post width */
+  margin: auto;
+  min-height: 14rem;
+  height: 14rem;
+}
+
+.gallery {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none; /* hide scrollbar (Firefox) */
+}
+
+.gallery::-webkit-scrollbar {
+  display: none; /* hide scrollbar (Chrome/Safari) */
+}
+
+.gallery img {
+  flex: 0 0 100%;         /* each image takes full width */
+  scroll-snap-align: center;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+/* Controls */
+.gallery-container button {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0,0,0,0.6);
+  border: none;
+  color: white;
+  font-size: 2rem;
+  padding: 0 8px;
+  padding-bottom: 2px;
+  cursor: pointer;
+  z-index: 10;
+  font-size: 2rem;
+  border-radius: 4px;
+  text-align: center;
+  align-self: center;
+}
+
+.gallery-container button:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+.gallery-container button:first-of-type {
+  left: 8px;
+}
+.gallery-container button:last-of-type {
+  right: 8px;
+}
+
+/* Counter */
+.counter {
+  position: absolute;
+  bottom: 8px;
+  right: 12px;
+  background: rgba(0,0,0,0.6);
+  color: white;
+  font-size: 0.85rem;
+  padding: 2px 6px;
+  border-radius: 4px;
 }
 
 /* PAGES */

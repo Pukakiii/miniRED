@@ -3,6 +3,7 @@ import coments from "../assets/comments.svg";
 import vote from "../assets/vote.svg";
 import saved from "../assets/navbar/saved-menu.svg";
 import BigPost from "./bigPostCard.jsx";
+import Media from "./media.jsx";
 
 export default function Post({ data, index }) {
   const [isBig, setIsBig] = React.useState(false);
@@ -54,7 +55,7 @@ export default function Post({ data, index }) {
             overflow: "hidden",
           }}
         >
-          <img src={data.url} id="content-img" />
+          <Media post={data}  />
           <div className="post-info">
             <span className="post-author">u/{data.author}</span>
             <span className="post-sub"> {data.subReddit}</span>
@@ -98,7 +99,14 @@ export default function Post({ data, index }) {
         </div>
         {isEveryFifthIndex(index) && <div className="anchor">{index + 1}</div>}
       </article>
-      {isBig &&<BigPost handleClick={handleClick} big={isBig} data={data} index={index} />}
+      {isBig && (
+        <BigPost
+          handleClick={handleClick}
+          big={isBig}
+          data={data}
+          index={index}
+        />
+      )}
     </>
     // temporary
   );

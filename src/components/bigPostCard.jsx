@@ -1,7 +1,7 @@
-import React from "react";
 import coments from "../assets/comments.svg";
 import vote from "../assets/vote.svg";
 import saved from "../assets/navbar/saved-menu.svg";
+import Media from "./media.jsx";
 
 export default function BigPost({ data, index, handleClick, big }) {
   const numDownvotes = (score, ratio) => {
@@ -18,12 +18,14 @@ export default function BigPost({ data, index, handleClick, big }) {
   return (
     <article
       id={`anchor-${index}`}
-      className="big-post"
+      className={big ? "big-post show" : "big-post"}
       // style={{ display: big ? "grid" : "none" }}
     >
       <div style={{ gridArea: "big-Info" }} className="big-post-info">
         <span className="big-post-author">u/{data.author}</span>
-        <button onClick={handleClick} id="close">✖</button>
+        <button onClick={handleClick} id="close">
+          ✖
+        </button>
         <span className="big-post-sub"> {data.subReddit}</span>
       </div>
       <div
@@ -51,7 +53,7 @@ export default function BigPost({ data, index, handleClick, big }) {
           overflow: "hidden",
         }}
       >
-        <img src={data.url} id="content-img" />
+        <Media post={data} />
       </section>
 
       <div className="big-post-stats" style={{ gridArea: "stats" }}>

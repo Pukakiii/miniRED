@@ -36,10 +36,7 @@ export default function Posts() {
   useEffect(() => {
     if (page === "popular") {
       const popPosts = JSON.parse(localStorage.getItem("popular"));
-      const {posts} = popPosts; // temporary
-      // dispatch(fetchPopPostsThunk(category));
-      console.log("Pop posts from localStorage:", popPosts);
-      setPosts(posts); // temporary 
+      dispatch(fetchPopPostsThunk(category));
     }
     if (page === "subreddit" && category && postsArr.length === 0) {
       const subPosts = JSON.parse(localStorage.getItem("subreddit"));
