@@ -1,28 +1,35 @@
 import { useParams, useLocation, NavLink } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useAppSelector } from "../app/hooks";
+import type { RootState } from "../app/store";
+import type { ReactElement } from "react";
+
 export default function CategoryLine() {
   const location = useLocation();
-  const params = useParams();
+  const params = useParams<{ name?: string }>();
 
-  const numPosts = useSelector((state) => {
+  const numPosts = useAppSelector((state: RootState) => {
     if (location.pathname.includes("popular")) {
       return state.popular.posts.numPosts;
-    } else if (location.pathname.includes("subreddit")) {
+    }
+    if (location.pathname.includes("subreddit")) {
       return state.subreddit.posts.numPosts;
     }
+    return 0;
   });
 
-  const linkFlairs = useSelector((state) => state.subreddit.subInfo.data);
+  const linkFlairs = useAppSelector(
+    (state: RootState) => state.subreddit.subInfo.data ?? [],
+  );
 
-  let checkPoints = Math.floor(numPosts / 5);
+  const checkPoints = Math.max(0, Math.floor(numPosts / 5));
 
   function createCheckPoints() {
-    const checkPointsArray = [];
+    const checkPointsArray: ReactElement[] = [];
     for (let i = 0; i <= checkPoints; i++) {
       checkPointsArray.push(
         <a href={`#anchor-${i * 5}`} key={i} className="points">
           {i * 5}
-        </a>
+        </a>,
       );
     }
     return checkPointsArray;
@@ -40,14 +47,16 @@ export default function CategoryLine() {
           {category.charAt(0).toUpperCase() + category.slice(1)}
         </NavLink>
       ));
-    } else if (location.pathname.includes("subreddit")) {
-      return linkFlairs[0] ? (
+    }
+
+    if (location.pathname.includes("subreddit")) {
+      return linkFlairs.length > 0 ? (
         <>
-          <NavLink to={`/subreddit/${params.name}`}>All</NavLink>
+          <NavLink to={`/subreddit/${params.name ?? ""}`}>All</NavLink>
           {linkFlairs.map((flair, i) => (
             <NavLink
               key={i}
-              to={`/subreddit/${params.name}/${flair}`}
+              to={`/subreddit/${params.name ?? ""}/${flair}`}
               className={({ isActive }) => (isActive ? "activated" : undefined)}
             >
               {flair}
@@ -58,20 +67,20 @@ export default function CategoryLine() {
         <p style={{ color: "rgba(0, 0, 0, 0.5)" }}>no categories here</p>
       );
     }
+
+    return null;
   }
 
   return (
-    <>
-      <section className="line">
-        <div className="filter">{createCategoryLinks()}</div>
-        <div className="feed-marker">
-          <span>Jump to:</span>
-          <div id="checkpoints">{createCheckPoints()}</div>
-        </div>
-        <div id="about">
-          <a>About</a>
-        </div>
-      </section>
-    </>
+    <section className="line">
+      <div className="filter">{createCategoryLinks()}</div>
+      <div className="feed-marker">
+        <span>Jump to:</span>
+        <div id="checkpoints">{createCheckPoints()}</div>
+      </div>
+      <div id="about">
+        <a>About</a>
+      </div>
+    </section>
   );
 }

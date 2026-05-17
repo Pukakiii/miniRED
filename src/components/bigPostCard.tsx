@@ -1,10 +1,23 @@
 import coments from "../assets/comments.svg";
 import vote from "../assets/vote.svg";
 import saved from "../assets/navbar/saved-menu.svg";
-import Media from "./media.jsx";
+import Media from "./media";
+import type { PostData } from "../types";
 
-export default function BigPost({ data, index, handleClick, big }) {
-  const numDownvotes = (score, ratio) => {
+interface BigPostProps {
+  data: PostData;
+  index: number;
+  handleClick: () => void;
+  big: boolean;
+}
+
+export default function BigPost({
+  data,
+  index,
+  handleClick,
+  big,
+}: BigPostProps) {
+  const numDownvotes = (score: number, ratio: number) => {
     if (score === 0 || ratio === 0.5) {
       return { ups: 0, downs: 0 };
     }
@@ -12,14 +25,13 @@ export default function BigPost({ data, index, handleClick, big }) {
     const downs = ups - score;
     return { ups, downs };
   };
+
   const { ups, downs } = numDownvotes(data.ups, data.ratio);
-  console.log(big);
 
   return (
     <article
       id={`anchor-${index}`}
       className={big ? "big-post show" : "big-post"}
-      // style={{ display: big ? "grid" : "none" }}
     >
       <div style={{ gridArea: "big-Info" }} className="big-post-info">
         <span className="big-post-author">u/{data.author}</span>
@@ -40,7 +52,6 @@ export default function BigPost({ data, index, handleClick, big }) {
       </time>
       {data.selftext && (
         <span style={{ gridArea: "selftext" }} className="big-post-more">
-          {" "}
           {data.selftext}
         </span>
       )}
@@ -75,7 +86,7 @@ export default function BigPost({ data, index, handleClick, big }) {
         </div>
         <div id="saved">
           <img id="saved-icon" src={saved} alt="Saved icon" />
-          <span>{}</span>
+          <span />
         </div>
       </div>
     </article>

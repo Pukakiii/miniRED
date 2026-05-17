@@ -1,9 +1,8 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { useState } from "react";
 import "./App.css";
-import Start from "./pages/Start.jsx";
-import Subreddit from "./pages/SubReddit.jsx";
-import Popular from "./pages/Popular.jsx";
+import Start from "./pages/Start";
+import Subreddit from "./pages/SubReddit";
+import Popular from "./pages/Popular";
 
 function App() {
   return (

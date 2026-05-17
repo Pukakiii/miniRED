@@ -1,7 +1,5 @@
-import { Link, NavLink, Outlet } from "react-router-dom";
-import Header from "../components/header.jsx";
-import Navbar from "../components/navbar.jsx";
-import CategoryLine from "../components/categoryline.jsx";
+import { Link } from "react-router-dom";
+import Header from "../components/header";
 import mainIcon from "../assets/navbar/main.svg";
 import popIcon from "../assets/navbar/popoular.svg";
 

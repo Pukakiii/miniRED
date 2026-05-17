@@ -1,6 +1,10 @@
-export async function fetchPopPosts(category = "best") {
+import type { FetchPostsResponse, FetchSubredditResponse } from "../types";
+
+export async function fetchPopPosts(
+  category = "best",
+): Promise<FetchPostsResponse> {
   // helper function to convert to time ago format
-  function timeAgo(timestampInSeconds) {
+  function timeAgo(timestampInSeconds: number): string {
     const now = Date.now();
 
     const secondsAgo = Math.floor((now - timestampInSeconds * 1000) / 1000);
@@ -18,12 +22,12 @@ export async function fetchPopPosts(category = "best") {
 
   try {
     const response = await fetch(
-      `https://corsproxy.io/?https://www.reddit.com/r/popular/${category}.json?limit=6`
+      `https://corsproxy.io/?https://www.reddit.com/r/popular/${category}.json?limit=6`,
     );
-    const data = await response.json();
+    const data: any = await response.json();
 
     return {
-      posts: data.data.children.map((child) => {
+      posts: data.data.children.map((child: any) => {
         return {
           [child.data.id]: {
             subReddit: child.data.subreddit_name_prefixed,
@@ -54,12 +58,15 @@ export async function fetchPopPosts(category = "best") {
     };
   } catch (error) {
     console.error("Failed to fetch posts:", error);
+    return { posts: [], numPosts: 0 };
   }
 }
 
-export async function fetchSubrredit(subName) {
+export async function fetchSubrredit(
+  subName: string,
+): Promise<FetchSubredditResponse> {
   // helper function to convert to time ago format
-  function timeAgo(timestampInSeconds) {
+  function timeAgo(timestampInSeconds: number): string {
     const now = Date.now();
 
     const secondsAgo = Math.floor((now - timestampInSeconds * 1000) / 1000);
@@ -77,17 +84,20 @@ export async function fetchSubrredit(subName) {
 
   try {
     const response = await fetch(
-      `https://corsproxy.io/?https://www.reddit.com/r/${subName}/new.json?limit=6`
+      `https://corsproxy.io/?https://www.reddit.com/r/${subName}/new.json?limit=6`,
     );
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
-    const postsData = await response.json();
+    const postsData: any = await response.json();
     console.log("Fetched subposts:", postsData);
-    const linkFlairs = [];
+    const linkFlairs: string[] = [];
     return {
-      posts: postsData.data.children.map((child) => {
-        if (!linkFlairs.includes(child.data.link_flair_text)) {
+      posts: postsData.data.children.map((child: any) => {
+        if (
+          child.data.link_flair_text &&
+          !linkFlairs.includes(child.data.link_flair_text)
+        ) {
           linkFlairs.push(child.data.link_flair_text);
         }
         return {
@@ -114,14 +124,15 @@ export async function fetchSubrredit(subName) {
             selftext: child.data.selftext,
             video: child.data.is_video ? "Video" : false,
             id: child.data.id,
-            category: child.data.link_flair_text,
+            category: child.data.link_flair_text ?? null,
           },
         };
       }),
       numPosts: postsData.data.dist,
-      linkFlairs: linkFlairs,
+      linkFlairs,
     };
   } catch (error) {
     console.error("Failed to fetch posts:", error);
+    return { posts: [], numPosts: 0, linkFlairs: [] };
   }
 }

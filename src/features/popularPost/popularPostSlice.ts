@@ -1,28 +1,44 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { fetchPopPosts } from "../../api/postsAPI.js";
+import {
+  createSlice,
+  createAsyncThunk,
+  type PayloadAction,
+} from "@reduxjs/toolkit";
+import { fetchPopPosts } from "../../api/postsAPI";
+import type { FetchPostsResponse, PostRecord } from "../../types";
 
 export const fetchPopPostsThunk = createAsyncThunk(
   "popular/fetchPopPostsThunk",
-  async (category) => {
+  async (category: string): Promise<FetchPostsResponse> => {
     const response = await fetchPopPosts(category);
     console.log("Fetched posts:", response);
     return response;
-  }
+  },
 );
+
+interface PopularState {
+  posts: {
+    data: PostRecord[];
+    numPosts: number;
+    loading: boolean;
+    error: boolean;
+  };
+}
+
+const initialState: PopularState = {
+  posts: {
+    data: [],
+    numPosts: 0,
+    loading: false,
+    error: false,
+  },
+};
 
 export const popularPostSlice = createSlice({
   name: "popular",
-  initialState: {
-    posts: {
-      data: [],
-      numPosts: 0,
-      loading: false,
-      error: false,
-    },
-  },
+  initialState,
   reducers: {
-    setPopPosts(state, action) {
-      state.data = action.payload;
+    setPopPosts(state, action: PayloadAction<PostRecord[]>) {
+      state.posts.data = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -35,8 +51,6 @@ export const popularPostSlice = createSlice({
         const { posts, numPosts } = action.payload;
         state.posts.data = posts;
         state.posts.numPosts = numPosts;
-        console.log("Reducer state:", state.posts.data);
-        console.log("Reducer state:", state.posts.numPosts);
         localStorage.setItem("popular", JSON.stringify(action.payload));
         state.posts.loading = false;
         state.posts.error = false;
@@ -49,5 +63,4 @@ export const popularPostSlice = createSlice({
 });
 
 export default popularPostSlice.reducer;
-
 export const { setPopPosts } = popularPostSlice.actions;

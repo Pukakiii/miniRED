@@ -1,35 +1,35 @@
 import logo from "../assets/minired-logo.png";
 import { useNavigate, useLocation, useParams } from "react-router-dom";
-import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useState, type FormEvent } from "react";
+import { useAppDispatch } from "../app/hooks";
 import { fetchSubThunk } from "../features/subreddit/subredditPostSlice";
 
 export default function Header() {
   const [showHint, setShowHint] = useState(true);
   const location = useLocation();
-  const params = useParams();
+  const params = useParams<{ name?: string }>();
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const isPopularPage = location.pathname.includes("/popular");
   const isSubreddit = location.pathname.includes("/subreddit");
-  console.log(params);
 
-  function handleSubmit(e) {
+  function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setShowHint(false);
 
-    const input = e.target.querySelector("input");
-    const formData = new FormData(e.target);
-    const value = formData.get("sub").replace(/\s+/g, "");
+    const form = e.currentTarget;
+    const input = form.querySelector<HTMLInputElement>("input");
+    const formData = new FormData(form);
+    const rawValue = formData.get("sub");
+    const value =
+      typeof rawValue === "string" ? rawValue.replace(/\s+/g, "") : "";
 
-    dispatch(fetchSubThunk(value))
-    
-    console.log(formData);
-    console.log('VALUE', value);
-    console.log(location);
-    console.log(e);
-    
+    if (!input || !value) {
+      return;
+    }
+
+    dispatch(fetchSubThunk(value));
     input.value = "";
     navigate(`/subreddit/${value}`);
   }

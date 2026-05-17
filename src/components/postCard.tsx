@@ -2,18 +2,22 @@ import React from "react";
 import coments from "../assets/comments.svg";
 import vote from "../assets/vote.svg";
 import saved from "../assets/navbar/saved-menu.svg";
-import BigPost from "./bigPostCard.jsx";
-import Media from "./media.jsx";
+import BigPost from "./bigPostCard";
+import Media from "./media";
+import type { PostData } from "../types";
 
-export default function Post({ data, index }) {
+interface PostProps {
+  data: PostData;
+  index: number;
+}
+
+export default function Post({ data, index }: PostProps) {
   const [isBig, setIsBig] = React.useState(false);
-  const handleClick = () => setIsBig(!isBig);
+  const handleClick = () => setIsBig((current) => !current);
 
-  const isEveryFifthIndex = (i) => {
-    return i === 0 ? true : (i + 1) % 5 === 0;
-  };
+  const isEveryFifthIndex = (i: number) => (i === 0 ? true : (i + 1) % 5 === 0);
 
-  const numDownvotes = (score, ratio) => {
+  const numDownvotes = (score: number, ratio: number) => {
     if (score === 0 || ratio === 0.5) {
       return { ups: 0, downs: 0 };
     }
@@ -21,10 +25,8 @@ export default function Post({ data, index }) {
     const downs = ups - score;
     return { ups, downs };
   };
+
   const { ups, downs } = numDownvotes(data.ups, data.ratio);
-  // console.log("ups", ups, "downs", downs);
-  console.log(isBig);
-  // console.log("ind:", index, data.title, isEveryFifthIndex(index));
 
   return (
     <>
@@ -55,13 +57,13 @@ export default function Post({ data, index }) {
             overflow: "hidden",
           }}
         >
-          <Media post={data}  />
+          <Media post={data} />
           <div className="post-info">
             <span className="post-author">u/{data.author}</span>
             <span className="post-sub"> {data.subReddit}</span>
             {data.selftext && (
               <span className="post-more"> {data.selftext}</span>
-            )}{" "}
+            )}
           </div>
         </section>
         <div id="upvote" className="popular-cell">
@@ -95,7 +97,7 @@ export default function Post({ data, index }) {
             src={saved}
             alt="Saved icon"
           />
-          <span>{}</span>
+          <span />
         </div>
         {isEveryFifthIndex(index) && <div className="anchor">{index + 1}</div>}
       </article>
@@ -108,6 +110,5 @@ export default function Post({ data, index }) {
         />
       )}
     </>
-    // temporary
   );
 }
