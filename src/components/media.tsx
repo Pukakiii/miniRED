@@ -125,7 +125,6 @@ export default function PostMedia({
         id="post-media"
         src={post.url.replace("watch?v=", "embed/")}
         title={post.title}
-        frameBorder="0"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
         allowFullScreen
       />

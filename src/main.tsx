@@ -7,11 +7,8 @@ import { store } from "./app/store";
 import { Provider } from "react-redux";
 
 const rootElement = document.getElementById("root");
-if (!rootElement) {
-  throw new Error("Root element not found");
-}
 
-createRoot(rootElement).render(
+createRoot(rootElement as HTMLElement).render(
   <StrictMode>
     <Provider store={store}>
       <App />

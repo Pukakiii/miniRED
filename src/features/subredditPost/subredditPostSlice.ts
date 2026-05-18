@@ -3,16 +3,16 @@ import {
   createAsyncThunk,
   type PayloadAction,
 } from "@reduxjs/toolkit";
-import { fetchSubrredit } from "../../api/postsAPI";
-import type { FetchSubredditResponse, PostRecord } from "../../types";
+import { fetchSubPosts } from "../../api/subPostsAPI";
+import type { FetchSubPostsResponse, PostRecord } from "../../types";
 
 export const fetchSubThunk = createAsyncThunk<
-  FetchSubredditResponse,
+  FetchSubPostsResponse,
   string,
   { rejectValue: { message: string } }
 >("subreddit/fetchSubThunk", async (subName: string, { rejectWithValue }) => {
   try {
-    const response = await fetchSubrredit(subName);
+    const response = await fetchSubPosts(subName);
     console.log("Fetched sub:", response);
     return response;
   } catch (error) {

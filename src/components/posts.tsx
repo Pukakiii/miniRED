@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useLocation, useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { fetchPopPostsThunk } from "../features/popularPost/popularPostSlice";
-import { setSubPosts } from "../features/subreddit/subredditPostSlice";
+import { setSubPosts } from "../features/subredditPost/subredditPostSlice";
 import Post from "./postCard";
 import type { PostRecord } from "../types";
 

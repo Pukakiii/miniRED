@@ -31,6 +31,6 @@ export interface FetchPostsResponse {
   numPosts: number;
 }
 
-export interface FetchSubredditResponse extends FetchPostsResponse {
+export interface FetchSubPostsResponse extends FetchPostsResponse {
   linkFlairs: string[];
 }

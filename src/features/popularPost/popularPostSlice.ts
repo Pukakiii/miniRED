@@ -3,7 +3,7 @@ import {
   createAsyncThunk,
   type PayloadAction,
 } from "@reduxjs/toolkit";
-import { fetchPopPosts } from "../../api/postsAPI";
+import { fetchPopPosts } from "../../api/popPostsAPI";
 import type { FetchPostsResponse, PostRecord } from "../../types";
 
 export const fetchPopPostsThunk = createAsyncThunk(

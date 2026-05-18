@@ -2,7 +2,7 @@ import logo from "../assets/minired-logo.png";
 import { useNavigate, useLocation, useParams } from "react-router-dom";
 import { useState, type FormEvent } from "react";
 import { useAppDispatch } from "../app/hooks";
-import { fetchSubThunk } from "../features/subreddit/subredditPostSlice";
+import { fetchSubThunk } from "../features/subredditPost/subredditPostSlice";
 
 export default function Header() {
   const [showHint, setShowHint] = useState(true);
