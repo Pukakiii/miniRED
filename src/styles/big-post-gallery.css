@@ -1,0 +1,72 @@
+/* GALLERY SWIPE */
+.gallery-container {
+  position: relative;
+  width: 100%;
+  max-width: 600px; /* match post width */
+  margin: auto;
+  min-height: 14rem;
+  height: 14rem;
+}
+
+.gallery {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none; /* hide scrollbar (Firefox) */
+}
+
+.gallery::-webkit-scrollbar {
+  display: none; /* hide scrollbar (Chrome/Safari) */
+}
+
+.gallery img {
+  flex: 0 0 100%; /* each image takes full width */
+  scroll-snap-align: center;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+/* Controls */
+.gallery-container button {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0, 0, 0, 0.6);
+  border: none;
+  color: white;
+  font-size: 2rem;
+  padding: 0 8px;
+  padding-bottom: 2px;
+  cursor: pointer;
+  z-index: 10;
+  font-size: 2rem;
+  border-radius: 4px;
+  text-align: center;
+  align-self: center;
+}
+
+.gallery-container button:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+.gallery-container button:first-of-type {
+  left: 8px;
+}
+.gallery-container button:last-of-type {
+  right: 8px;
+}
+
+/* Counter */
+.counter {
+  position: absolute;
+  bottom: 8px;
+  right: 50%;
+  transform: translateX(50%);
+  background: rgba(0, 0, 0, 0.6);
+  color: white;
+  font-size: 0.85rem;
+  padding: 2px 6px;
+  border-radius: 4px;
+  z-index: 10;
+}

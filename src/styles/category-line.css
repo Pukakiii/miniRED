@@ -1,0 +1,158 @@
+.line {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 90%;
+  left: 5%;
+  right: 5%;
+  height: 1.75rem;
+  border-radius: 1rem;
+  background-color: rgba(255, 44, 20, 0.5);
+  background: linear-gradient(
+    to right,
+    rgba(222, 36, 36, 0),
+    rgba(237, 33, 58, 0.5) 25%,
+    rgba(255, 90, 1, 0.5) 75%,
+    rgba(0, 0, 0, 0)
+  );
+  border: 1px solid rgb(0, 0, 0, 0.2);
+}
+.filter {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  position: relative;
+  height: 100%;
+  width: 33%;
+  border: 1px solid rgb(0, 0, 0, 0.2);
+  border-radius: 1rem;
+  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+  overflow: scroll;
+  overflow-y: hidden;
+  background: linear-gradient(to right, transparent 80%, rgba(0, 0, 0, 0.5));
+}
+
+.filter a {
+  font-weight: 500;
+  color: rgba(255, 255, 255);
+  text-decoration: none;
+  height: 100%;
+  border-radius: 1rem;
+  line-height: 1.75rem;
+  padding: 0 1rem;
+  margin: 0 0.5rem;
+  background-color: rgba(0, 0, 0, 0.25);
+}
+.filter a:last-of-type {
+  margin-right: 0;
+}
+
+.filter a:first-of-type {
+  margin-left: 0;
+}
+.filter a:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+}
+.filter a:active {
+  background-color: rgba(0, 76, 255, 0.5);
+}
+.filter .activated {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+.filter::-webkit-scrollbar {
+  display: none;
+}
+.feed-marker {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+  width: 50%;
+  /* margin-right: 2rem; */
+  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+  color: rgba(255, 255, 255);
+  border: rgb(130, 130, 130) 1px solid;
+  border-radius: 1rem;
+}
+.feed-marker span {
+  text-align: center;
+  padding: 0 1rem;
+  font-weight: 700;
+  line-height: 1.75rem;
+  height: 100%;
+  min-width: 100px;
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 1rem;
+}
+#checkpoints {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  height: 100%;
+  width: 100%;
+  border-radius: 1rem;
+  overflow: hidden;
+  overflow-x: scroll;
+  padding: 1px 0;
+}
+#checkpoints::-webkit-scrollbar {
+  height: 1px;
+  width: 1px;
+}
+
+#checkpoints::-webkit-scrollbar-track {
+  background: transparent; /* No visible track */
+}
+
+#checkpoints::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.3); /* Faint dark thumb */
+  border-radius: 10px;
+}
+.points {
+  height: 100%;
+  width: 2rem;
+  margin: 0 0.5rem;
+  padding: 0 1.5rem;
+  border-radius: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+  font-weight: 500;
+  color: rgb(0, 0, 0);
+  background-color: rgba(255, 255, 255, 0.5);
+  text-decoration: none;
+}
+.points:hover {
+  background-color: rgba(255, 255, 255, 0.8);
+  cursor: pointer;
+}
+#about {
+  height: 100%;
+  border: 1px solid rgb(0, 0, 0, 0.2);
+  border-radius: 1rem;
+  display: flex;
+  align-items: center;
+  margin-left: 1rem;
+}
+#about a {
+  /* height: 100%; */
+  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+  padding: 0 1rem;
+  background: linear-gradient(90deg, #fa4949, #b50018);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 500;
+  border-radius: 1rem;
+  text-decoration: underline;
+  line-height: 2rem;
+}
+#about:hover {
+  background-color: whitesmoke;
+  cursor: pointer;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}

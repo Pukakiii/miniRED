@@ -1,0 +1,26 @@
+.start-nav {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 60vh;
+  z-index: 1000;
+}
+.start-nav img {
+  width: 100px;
+  height: 100px;
+  margin: 50px;
+  cursor: pointer;
+}
+#flame-container {
+  background-image:
+    linear-gradient(to bottom, rgb(255, 255, 255) 10%, transparent),
+    url("/starting-flame-minired.png");
+  background-blend-mode: screen;
+  background-size: cover;
+  background-position: bottom;
+  width: 100%;
+  height: 50%;
+  position: absolute;
+  bottom: 0;
+  z-index: -1;
+}
