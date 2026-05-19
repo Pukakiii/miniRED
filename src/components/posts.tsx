@@ -1,95 +1,59 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo } from "react";
 import { useLocation, useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { fetchPopPostsThunk } from "../features/popularPost/popularPostSlice";
 import { setSubPosts } from "../features/subredditPost/subredditPostSlice";
 import Post from "./postCard";
-import type { PostRecord } from "../types";
+import LoadingCircle from "../utils/loadingCircle";
+
 
 export default function Posts() {
-  const location = useLocation();
   const dispatch = useAppDispatch();
-  const params = useParams<{ flair?: string }>();
-  const [posts, setPosts] = useState<PostRecord[]>([]);
-  const [filteredPosts, setFilteredPosts] = useState<PostRecord[]>([]);
+  const location = useLocation();
+  const { flair } = useParams<{ flair?: string }>();
 
-  const page =
-    (location.pathname.split("/")[1] as "popular" | "subreddit" | "") || "";
-  const category = location.pathname.split("/")[2] || "";
+  //  page and category types 
+  const [, pageRoute, category] = location.pathname.split("/");
+  const page = (pageRoute as "popular" | "subreddit") || "";
 
-  const postsArr = useAppSelector((state) => {
-    if (page === "popular") {
-      return state.popular.posts.data;
-    }
-    if (page === "subreddit") {
-      return state.subreddit.posts.data;
-    }
-    return [];
-  });
+  // Redux data fetching selectors
+  const postsArr = useAppSelector((state) => state[page]?.posts?.data ?? []);
+  const isLoading = useAppSelector((state) => state[page]?.posts?.loading ?? false);
 
-  const isLoading = useAppSelector((state) => {
-    if (page === "popular") {
-      return state.popular.posts.loading;
-    }
-    if (page === "subreddit") {
-      return state.subreddit.posts.loading;
-    }
-    return false;
-  });
-
+  // Posts refetching
   useEffect(() => {
     if (page === "popular") {
-      dispatch(fetchPopPostsThunk(category));
-      return;
-    }
-
-    if (page === "subreddit" && category && postsArr.length === 0) {
+      dispatch(fetchPopPostsThunk(category || ""));
+    } else if (page === "subreddit" && category && postsArr.length === 0) {
       const subPostsRaw = localStorage.getItem("subreddit");
       if (subPostsRaw) {
-        const subPosts = JSON.parse(subPostsRaw) as {
-          posts: PostRecord[];
-          numPosts: number;
-          linkFlairs: string[];
-        };
-        dispatch(setSubPosts(subPosts));
+        dispatch(setSubPosts(JSON.parse(subPostsRaw)));
       }
     }
-  }, [category, dispatch, page, postsArr.length]);
+  }, [category, dispatch, page]); 
 
-  useEffect(() => {
-    setPosts(postsArr);
-  }, [postsArr]);
+  // Filtering subposts by flair
+  const displayedPosts = useMemo(() => {
+    if (!flair) return postsArr;
 
-  useEffect(() => {
-    if (params.flair) {
-      const filtered = posts.filter((category) => {
-        const [_, data] = Object.entries(category)[0] as [
-          string,
-          { category?: string | null },
-        ];
-        return params.flair === data.category;
-      });
-      setFilteredPosts(filtered);
-    } else {
-      setFilteredPosts(posts);
-    }
-  }, [posts, params.flair]);
-
-  function LoadingCircle() {
-    return <div className="loading-circle"></div>;
-  }
-
-  function createPostCards() {
-    return filteredPosts.map((post, index) => {
-      const [id, data] = Object.entries(post)[0] as [string, any];
-      return <Post index={index} key={id} data={data} />;
+    return postsArr.filter((postObj) => {
+      const [, data] = Object.entries(postObj)[0];
+      return data?.category === flair;
     });
-  }
+  }, [postsArr, flair]);
 
   return (
     <>
-      {isLoading && <LoadingCircle />}
-      <section className="posts">{createPostCards()}</section>
+      {isLoading ? (
+        <LoadingCircle />
+      ) : (
+        <section className="posts">
+          {displayedPosts.map((postObj, index) => {
+            const [id, data] = Object.entries(postObj)[0];
+            return <Post index={index} key={id} data={data} />;
+          })}
+        </section>
+      )}
     </>
   );
 }

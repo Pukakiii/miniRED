@@ -1,5 +1,5 @@
 import type { FetchSubPostsResponse } from "../types";
-import timeAgo from "./hepers";
+import timeAgo from "../utils/hepersAPI";
 
 export async function fetchSubPosts(
   subName: string,
@@ -55,6 +55,6 @@ export async function fetchSubPosts(
     };
   } catch (error) {
     console.error("Failed to fetch posts:", error);
-    return { posts: [], numPosts: 0, linkFlairs: [] };
+    throw error;
   }
 }

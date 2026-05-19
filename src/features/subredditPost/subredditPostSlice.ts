@@ -70,6 +70,7 @@ export const subRedditSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(fetchSubThunk.pending, (state) => {
+        state.posts.numPosts = 0;
         state.posts.loading = true;
         state.posts.error = false;
       })

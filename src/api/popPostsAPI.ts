@@ -1,5 +1,5 @@
 import type { FetchPostsResponse } from "../types";
-import timeAgo from "./hepers";
+import timeAgo from "../utils/hepersAPI";
 
 export async function fetchPopPosts(
   category = "best",
@@ -42,7 +42,6 @@ export async function fetchPopPosts(
     };
   } catch (error) {
     console.error("Failed to fetch posts:", error);
-    return { posts: [], numPosts: 0 };
+    throw error
   }
 }
-

@@ -6,3 +6,4 @@ export const numDownvotes = (score: number, ratio: number) => {
     const downs = ups - score;
     return { ups, downs };
   };
+
