@@ -10,7 +10,7 @@ export const fetchPopPostsThunk = createAsyncThunk(
   "popular/fetchPopPostsThunk",
   async (category: string): Promise<FetchPostsResponse> => {
     const response = await fetchPopPosts(category);
-    console.log("Fetched posts:", response);
+    // console.log("Fetched posts:", response);
     return response;
   },
 );

@@ -9,7 +9,9 @@ export async function fetchSubPosts(
       `https://corsproxy.io/?https://www.reddit.com/r/${subName}/new.json?limit=6`,
     );
     if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+      const errorObj = new Error(`HTTP error! status: ${response.ok}`);
+      (errorObj as any).status = response.status;
+      throw errorObj;
     }
     const postsData: any = await response.json();
     console.log("Fetched subposts:", postsData);
@@ -54,7 +56,6 @@ export async function fetchSubPosts(
       linkFlairs,
     };
   } catch (error) {
-    console.error("Failed to fetch posts:", error);
     throw error;
   }
 }

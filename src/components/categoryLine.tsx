@@ -18,7 +18,7 @@ export default function CategoryLine() {
   });
 
   const linkFlairs = useAppSelector(
-    (state: RootState) => state.subreddit.subInfo.data ?? [],
+    (state: RootState) => state.subreddit.posts.linkFlairs ?? [],
   );
 
   const checkPoints = Math.max(0, Math.floor(numPosts / 5));
