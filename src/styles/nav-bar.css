@@ -1,12 +1,14 @@
 nav {
-  background-color: rgba(255, 0, 0, 0.2);
-  height: 77px;
-  position: absolute;
-  width: 90%;
-  bottom: 2rem;
+  position: fixed;           
   left: 5%;
+  right: 5%;                 
+  bottom: 2rem;
+  height: 77px;
   border-radius: 50px;
-  z-index: 1000;
+  background-color: rgba(255, 0, 0, 0.2);
+  z-index: 10000;              
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px); 
 }
 nav ul {
   display: flex;
@@ -14,6 +16,7 @@ nav ul {
   align-items: center;
   height: 100%;
   width: 100%;
+  background-color: transparent;
   list-style-type: none;
 }
 nav ul li {
@@ -25,7 +28,8 @@ nav ul li {
 nav ul li img {
   vertical-align: middle;
   width: auto;
-  height: 4rem;
-  width: 4rem;
+  height: 6rem;
+  width: 6rem;
   cursor: pointer;
 }
+
