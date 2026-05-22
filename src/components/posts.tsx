@@ -4,7 +4,8 @@ import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { fetchPopPostsThunk } from "../features/popularPost/popularPostSlice";
 import { fetchSubThunk } from "../features/subredditPost/subredditPostSlice";
 import Post from "./postCard";
-import LoadingCircle from "../utils/loadingCircle";
+import {LoadingCircle} from "../utils/miniComponents";
+import {ErrorDisplay} from "../utils/miniComponents";
 
 export default function Posts() {
   const dispatch = useAppDispatch();
@@ -21,6 +22,8 @@ export default function Posts() {
   const isLoading = useAppSelector(
     (state) => state[page]?.posts?.loading ?? false,
   );
+  const error = useAppSelector((state) => state[page]?.posts?.error ?? null);
+
   console.log("PostsArr:", postsArr);
   // Posts refetching
   useEffect(() => {
@@ -41,18 +44,25 @@ export default function Posts() {
     });
   }, [postsArr, flair]);
 
+  // rendering logic
+  if (isLoading) {
+    return <LoadingCircle />;
+  }
+
+  if (error) {
+    return <ErrorDisplay error={error} />;
+  }
+
   return (
     <>
-      {isLoading ? (
-        <LoadingCircle />
-      ) : (
+      { 
         <section className="posts">
           {displayedPosts.map((postObj, index) => {
             const [id, data] = Object.entries(postObj)[0];
             return <Post index={index} key={id} data={data} />;
           })}
         </section>
-      )}
+      }
     </>
   );
 }

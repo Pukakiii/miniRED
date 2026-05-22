@@ -3,7 +3,7 @@ import vote from "../assets/vote.svg";
 import saved from "../assets/navbar/saved-menu.svg";
 import Media from "./media";
 import type { PostData } from "../types";
-import { numDownvotes } from "./helpers";
+import { numDownvotes } from "../utils/helpersComponents";
 
 interface BigPostProps {
   data: PostData;

@@ -6,6 +6,7 @@ import {
 import { fetchSubPosts } from "../../api/subPostsAPI";
 import type { FetchSubPostsResponse, PostRecord } from "../../types";
 
+// thunk for fetching subreddit posts
 export const fetchSubThunk = createAsyncThunk<
   FetchSubPostsResponse,
   string,
@@ -91,7 +92,11 @@ export const subRedditSlice = createSlice({
         state.posts.linkFlairs = [];
         state.posts.loading = false;
         if (action.payload) {
-          ;
+          state.posts.error = {
+            errorMessage: action.payload.errorMessage,
+            errorStatus: action.payload.errorStatus,
+            arg: action.payload.arg,
+          };
         } else {
           // Fallback if the thunk throws outside our try/catch block
           state.posts.error = {

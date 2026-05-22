@@ -25,7 +25,34 @@
   animation: spin 0.6s linear infinite;
   margin: 2rem auto;
 }
-
+/* error interface */
+.error {
+  width: min-content;
+  height: 50vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  margin: 2rem auto;
+  color: rgb(0, 0, 0);
+}
+.error p {
+  /* margin: 0.5rem 0; */
+  align-self: start;
+  font-style: italic;
+  font-weight: bold;
+  font-size: 1.5rem;
+  /* border: #000 solid 1px; */
+}
+.error .error-status {
+  margin: 0;
+  align-self: start;
+  font-family: 'Arial', sans-serif;
+  font-style: italic;
+  font-weight: bolder;
+  font-size: 15rem;
+  line-height: 0.8;
+}
 @keyframes spin {
   to {
     transform: rotate(360deg);

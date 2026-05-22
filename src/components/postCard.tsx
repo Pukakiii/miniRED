@@ -5,7 +5,7 @@ import saved from "../assets/navbar/saved-menu.svg";
 import BigPost from "./bigPostCard";
 import Media from "./media";
 import type { PostData } from "../types";
-import { numDownvotes } from "./helpers";
+import { numDownvotes } from "../utils/helpersComponents";
 
 interface PostProps {
   data: PostData;
