@@ -6,7 +6,6 @@
   align-items: center;
   justify-content: center;
   padding: 1.25rem;
-  padding-bottom: calc(5.5rem + env(safe-area-inset-bottom, 0px));
 }
 
 .big-post-backdrop {

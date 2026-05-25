@@ -90,8 +90,6 @@
 .nav-list a:hover,
 .nav-list a:focus-visible {
   transform: scale(1.06);
-  /* background: rgba(255, 255, 255, 0.2); */
-  
 }
 
 .nav-list a.active {

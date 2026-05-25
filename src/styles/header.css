@@ -47,11 +47,18 @@ header > a {
   position: absolute;
   right: 5%;
   line-height: 0;
+  border-radius: 5px;
 }
 
-header > a img {
-  display: block;
+header > a:hover {
+  /* display: block; */
+  box-shadow:  0 0 5px rgb(255, 188, 188) ;
 }
+header > a:hover {
+  display: block;
+
+}
+
 
 .shortcut {
   position: absolute;

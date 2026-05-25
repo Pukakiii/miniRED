@@ -25,8 +25,7 @@ export default function SubredditSearch() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const { suggestions, loading, error } =
-    useSubredditSuggestions(query);
+  const { suggestions, loading, error } = useSubredditSuggestions(query);
 
   const goToSubreddit = useCallback(
     (name: string) => {
@@ -42,7 +41,7 @@ export default function SubredditSearch() {
       dispatch(fetchSubThunk(normalized));
       navigate(`/subreddit/${normalized}`);
     },
-    [dispatch, navigate]
+    [dispatch, navigate],
   );
 
   function handleSubmit(e: FormEvent<HTMLFormElement>) {
@@ -52,27 +51,16 @@ export default function SubredditSearch() {
 
     if (!value) return;
 
-    if (
-      highlightIndex >= 0 &&
-      suggestions[highlightIndex]
-    ) {
-      goToSubreddit(
-        suggestions[highlightIndex].name
-      );
+    if (highlightIndex >= 0 && suggestions[highlightIndex]) {
+      goToSubreddit(suggestions[highlightIndex].name);
       return;
     }
 
     goToSubreddit(value);
   }
 
-  function handleKeyDown(
-    e: KeyboardEvent<HTMLInputElement>
-  ) {
-    if (
-      !open &&
-      (e.key === "ArrowDown" ||
-        e.key === "ArrowUp")
-    ) {
+  function handleKeyDown(e: KeyboardEvent<HTMLInputElement>) {
+    if (!open && (e.key === "ArrowDown" || e.key === "ArrowUp")) {
       setOpen(true);
       return;
     }
@@ -80,55 +68,33 @@ export default function SubredditSearch() {
     if (e.key === "ArrowDown") {
       e.preventDefault();
 
-      setHighlightIndex((i) =>
-        i < suggestions.length - 1
-          ? i + 1
-          : 0
-      );
+      setHighlightIndex((i) => (i < suggestions.length - 1 ? i + 1 : 0));
     } else if (e.key === "ArrowUp") {
       e.preventDefault();
 
-      setHighlightIndex((i) =>
-        i > 0
-          ? i - 1
-          : suggestions.length - 1
-      );
-    } else if (
-      e.key === "Enter" &&
-      highlightIndex >= 0
-    ) {
+      setHighlightIndex((i) => (i > 0 ? i - 1 : suggestions.length - 1));
+    } else if (e.key === "Enter" && highlightIndex >= 0) {
       e.preventDefault();
 
-      goToSubreddit(
-        suggestions[highlightIndex].name
-      );
+      goToSubreddit(suggestions[highlightIndex].name);
     } else if (e.key === "Escape") {
       setOpen(false);
       setHighlightIndex(-1);
     }
   }
 
-  const showList =
+  const showList = Boolean(
     open &&
     query.trim().length >= 2 &&
-    (loading ||
-      suggestions.length > 0 ||
-      error);
+    (loading || suggestions.length > 0 || error),
+  );
 
-  const rect =
-    searchRef.current?.getBoundingClientRect();
+  const rect = searchRef.current?.getBoundingClientRect();
 
   return (
     <>
-      <div
-        className="subreddit-search"
-        ref={searchRef}
-      >
-        <form
-          onSubmit={handleSubmit}
-          className="search-form"
-          role="search"
-        >
+      <div className="subreddit-search" ref={searchRef}>
+        <form onSubmit={handleSubmit} className="search-form" role="search">
           <input
             ref={inputRef}
             name="sub"
@@ -146,28 +112,17 @@ export default function SubredditSearch() {
             }}
             onFocus={() => setOpen(true)}
             onBlur={() => {
-              window.setTimeout(
-                () => setOpen(false),
-                150
-              );
+              window.setTimeout(() => setOpen(false), 150);
             }}
             onKeyDown={handleKeyDown}
           />
 
-          <button
-            type="submit"
-            disabled={!query.trim()}
-          >
+          <button type="submit" disabled={!query.trim()}>
             Go
           </button>
-
-          {showHint && (
-            <span className="search-hint">
-              ⬅ find your sub
-            </span>
-          )}
         </form>
       </div>
+      {showHint && <span className="search-hint">⬅ find your sub</span>}
 
       {showList &&
         rect &&
@@ -198,62 +153,43 @@ export default function SubredditSearch() {
 
             {!loading &&
               !error &&
-              suggestions.map(
-                (sub, i) => (
-                  <li
-                    key={sub.name}
-                    role="option"
-                    aria-selected={
-                      i === highlightIndex
-                    }
-                    className={
-                      i ===
-                      highlightIndex
-                        ? "search-suggestion search-suggestion--active"
-                        : "search-suggestion"
-                    }
-                    onMouseDown={(e) =>
-                      e.preventDefault()
-                    }
-                    onMouseEnter={() =>
-                      setHighlightIndex(i)
-                    }
-                    onClick={() =>
-                      goToSubreddit(
-                        sub.name
-                      )
-                    }
-                  >
-                    <span className="search-suggestion-name">
-                      {sub.displayName}
+              suggestions.map((sub, i) => (
+                <li
+                  key={sub.name}
+                  role="option"
+                  aria-selected={i === highlightIndex}
+                  className={
+                    i === highlightIndex
+                      ? "search-suggestion search-suggestion--active"
+                      : "search-suggestion"
+                  }
+                  onMouseDown={(e) => e.preventDefault()}
+                  onMouseEnter={() => setHighlightIndex(i)}
+                  onClick={() => goToSubreddit(sub.name)}
+                >
+                  <span className="search-suggestion-name">
+                    {sub.displayName}
+                  </span>
+
+                  <span className="search-suggestion-meta">
+                    {sub.subscribers.toLocaleString()} members
+                  </span>
+
+                  {sub.publicDescription && (
+                    <span className="search-suggestion-desc">
+                      {sub.publicDescription}
                     </span>
-
-                    <span className="search-suggestion-meta">
-                      {sub.subscribers.toLocaleString()}{" "}
-                      members
-                    </span>
-
-                    {sub.publicDescription && (
-                      <span className="search-suggestion-desc">
-                        {
-                          sub.publicDescription
-                        }
-                      </span>
-                    )}
-                  </li>
-                )
-              )}
-
-            {!loading &&
-              !error &&
-              suggestions.length ===
-                0 && (
-                <li className="search-suggestion search-suggestion--meta">
-                  No subreddits found
+                  )}
                 </li>
-              )}
+              ))}
+
+            {!loading && !error && suggestions.length === 0 && (
+              <li className="search-suggestion search-suggestion--meta">
+                No subreddits found
+              </li>
+            )}
           </ul>,
-          document.body
+          document.body,
         )}
     </>
   );
