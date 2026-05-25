@@ -3,6 +3,7 @@ import "./App.css";
 import Start from "./pages/Start";
 import Subreddit from "./pages/SubReddit";
 import Popular from "./pages/Popular";
+import Saved from "./pages/Saved";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
         <Route path="popular/new" element={<Popular />} />
         <Route path="popular/hot" element={<Popular />} />
         <Route path="popular/best" element={<Popular />} />
+        <Route path="saved" element={<Saved />} />
       </Routes>
     </BrowserRouter>
   );

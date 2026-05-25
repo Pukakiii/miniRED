@@ -29,6 +29,7 @@ export type PostRecord = Record<string, PostData>;
 export interface FetchPostsResponse {
   posts: PostRecord[];
   numPosts: number;
+  after?: string | null;
 }
 
 export interface FetchSubPostsResponse extends FetchPostsResponse {

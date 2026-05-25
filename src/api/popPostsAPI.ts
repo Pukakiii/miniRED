@@ -3,10 +3,12 @@ import timeAgo from "../utils/hepersAPI";
 
 export async function fetchPopPosts(
   category = "best",
+  after?: string | null,
 ): Promise<FetchPostsResponse> {
   try {
+    const afterParam = after ? `&after=${after}` : "";
     const response = await fetch(
-      `https://corsproxy.io/?https://www.reddit.com/r/popular/${category}.json?limit=6`,
+      `https://corsproxy.io/?https://www.reddit.com/r/popular/${category}.json?limit=6${afterParam}`,
     );
     const data: any = await response.json();
 
@@ -39,9 +41,10 @@ export async function fetchPopPosts(
         };
       }),
       numPosts: data.data.dist,
+      after: data.data.after ?? null,
     };
   } catch (error) {
     console.error("Failed to fetch posts:", error);
-    throw error
+    throw error;
   }
 }

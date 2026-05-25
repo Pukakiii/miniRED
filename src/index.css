@@ -32,7 +32,3 @@ button {
   font: inherit;
 }
 
-:focus-visible {
-  outline: 2px solid rgb(0, 136, 255);
-  outline-offset: 2px;
-}
