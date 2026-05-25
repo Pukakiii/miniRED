@@ -1,4 +1,4 @@
-import { useParams, useLocation, NavLink } from "react-router-dom";
+import { useParams, useLocation, NavLink, Link } from "react-router-dom";
 import { useMemo } from "react";
 import { useAppSelector } from "../app/hooks";
 import type { RootState } from "../app/store";
@@ -117,7 +117,7 @@ export default function CategoryLine() {
         <div id="checkpoints">{createCheckPoints()}</div>
       </div>
       <div id="about">
-        <a>About</a>
+        <Link target="_blank" to={"https://github.com/Pukakiii/miniRED/blob/rapid/README.md"}>About</Link>
       </div>
     </section>
   );
