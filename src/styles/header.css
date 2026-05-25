@@ -23,7 +23,6 @@ header h1 {
   margin: 0;
   padding: 0 4rem;
   max-width: 50%;
-  overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
   transition: all 200ms ease-in-out;
@@ -66,7 +65,7 @@ header > a img {
   border-radius: 1rem;
   padding: 0 1rem;
   max-width: 38%;
-  overflow: hidden;
+  /* overflow: hidden; */
   text-overflow: ellipsis;
   white-space: nowrap;
 }

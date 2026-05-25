@@ -60,7 +60,7 @@
 }
 
 .subreddit-search .search-hint {
-  position: absolute;
+  position: relative;
   left: calc(100% + 0.5rem);
   top: 0;
   line-height: 1.75rem;
@@ -92,6 +92,7 @@
   border: 1px solid rgba(0, 0, 0, 0.15);
   border-radius: 0.75rem;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  z-index: 100;
 }
 
 .search-suggestion {
@@ -127,7 +128,6 @@
 .search-suggestion-desc {
   font-size: 0.75rem;
   color: rgba(0, 0, 0, 0.65);
-  overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
