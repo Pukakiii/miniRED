@@ -1,86 +1,78 @@
-import coments from "../assets/comments.svg";
-import vote from "../assets/vote.svg";
-import saved from "../assets/navbar/saved-menu.svg";
+import { useEffect } from "react";
 import Media from "./media";
+import PostMeta from "./postMeta";
+import PostStats from "./postStats";
 import type { PostData } from "../types";
-import { numDownvotes } from "../utils/helpersComponents";
+import { truncateText } from "../utils/postPresentation";
 
 interface BigPostProps {
   data: PostData;
-  index: number;
-  handleClick: () => void;
-  big: boolean;
+  onClose: () => void;
 }
 
-export default function BigPost({
-  data,
-  index,
-  handleClick,
-  big,
-}: BigPostProps) {
-  const { ups, downs } = numDownvotes(data.ups, data.ratio);
+export default function BigPost({ data, onClose }: BigPostProps) {
+  useEffect(() => {
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", onKey);
+
+    return () => {
+      document.body.style.overflow = prev;
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [onClose]);
+
+  const bodyText = data.selftext?.trim();
 
   return (
-    <article
-      id={`anchor-${index}`}
-      className={big ? "big-post show" : "big-post"}
-    >
-      <div style={{ gridArea: "big-Info" }} className="big-post-info">
-        <span className="big-post-author">u/{data.author}</span>
-        <button onClick={handleClick} id="close">
-          ✖
-        </button>
-        <span className="big-post-sub"> {data.subReddit}</span>
-      </div>
-      <div
-        id="big-post-title-box"
-        className="big-post-title"
-        style={{ gridArea: "big-title" }}
+    <div className="big-post-layer" role="presentation">
+      <button
+        type="button"
+        className="big-post-backdrop"
+        aria-label="Close post"
+        onClick={onClose}
+      />
+      <article
+        className="big-post"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby={`big-post-title-${data.id}`}
       >
-        <h3>{data.title}</h3>
-      </div>
-      <time id="time" style={{ gridArea: "time" }}>
-        {data.timeAgo}
-      </time>
-      {data.selftext && (
-        <span style={{ gridArea: "selftext" }} className="big-post-more">
-          {data.selftext}
-        </span>
-      )}
-      <section
-        className="big-post-content"
-        style={{
-          gridArea: "big-content",
-          width: "100%",
-          position: "relative",
-          overflow: "hidden",
-        }}
-      >
-        <Media post={data} />
-      </section>
+        <div className="big-post-header">
+          <PostMeta data={data} showExcerpt={false} />
+          <button
+            type="button"
+            className="big-post-close"
+            id="close"
+            onClick={onClose}
+            aria-label="Close"
+          >
+            ✕
+          </button>
+        </div>
 
-      <div className="big-post-stats" style={{ gridArea: "stats" }}>
-        <div id="upvote">
-          <img
-            src={vote}
-            style={{ transform: "rotate(180deg)", gridArea: "upvote" }}
-            alt="up Vote icon"
-          />
-          <span>+{ups}</span>
-        </div>
-        <div id="downvote">
-          <img src={vote} alt="down Vote icon" />
-          <span>-{downs}</span>
-        </div>
-        <div id="comments">
-          <img src={coments} alt="Comments icon" />
-          <span>{data.numComments}</span>
-        </div>
-        <div id="saved">
-          <img id="saved-icon" src={saved} alt="Saved icon" />
-          <span />
-        </div>
-      </div>
-    </article>
+        <h3 id={`big-post-title-${data.id}`} className="big-post-title">
+          {data.title}
+        </h3>
+
+        <time className="big-post-time" dateTime={String(data.created)}>
+          {data.timeAgo}
+        </time>
+
+        {bodyText && (
+          <p className="big-post-more">{truncateText(bodyText, 1200)}</p>
+        )}
+
+        <section className="big-post-content">
+          <Media post={data} variant="modal" />
+        </section>
+
+        <PostStats data={data} variant="modal" />
+      </article>
+    </div>
   );
 }

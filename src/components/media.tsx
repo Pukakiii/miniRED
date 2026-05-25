@@ -1,12 +1,24 @@
 import { useRef, useState, type ReactElement } from "react";
 import type { PostData } from "../types";
+import { getMediaKind, isValidThumbnail } from "../utils/postMedia";
 
 interface PostMediaProps {
   post: PostData;
+  variant?: "card" | "modal";
 }
 
 interface GallerySwipeProps {
   items: string[];
+}
+
+function MediaPlaceholder({ title }: { title: string }) {
+  return (
+    <div className="post-media-placeholder" aria-hidden>
+      <span className="post-media-placeholder-text">
+        {title ? "Text post" : "No preview"}
+      </span>
+    </div>
+  );
 }
 
 function GallerySwipe({ items }: GallerySwipeProps): ReactElement {
@@ -24,36 +36,44 @@ function GallerySwipe({ items }: GallerySwipeProps): ReactElement {
     }
   };
 
-  const handleNext = () => {
-    if (activeIndex < items.length - 1) scrollToIndex(activeIndex + 1);
-  };
-
-  const handlePrev = () => {
-    if (activeIndex > 0) scrollToIndex(activeIndex - 1);
-  };
-
   return (
     <div className="gallery-container">
       <div className="gallery" ref={containerRef}>
         {items.map((src, i) => (
           <img
             loading="lazy"
-            id="post-media"
+            className="post-media"
             key={i}
             src={src}
-            alt={`gallery-${i}`}
+            alt={`Gallery image ${i + 1}`}
           />
         ))}
       </div>
-
-      <button onClick={handlePrev} disabled={activeIndex === 0}>
+      <button
+        type="button"
+        className="gallery-nav gallery-nav--prev"
+        onClick={(e) => {
+          e.stopPropagation();
+          if (activeIndex > 0) scrollToIndex(activeIndex - 1);
+        }}
+        disabled={activeIndex === 0}
+        aria-label="Previous image"
+      >
         ‹
       </button>
-      <button onClick={handleNext} disabled={activeIndex === items.length - 1}>
+      <button
+        type="button"
+        className="gallery-nav gallery-nav--next"
+        onClick={(e) => {
+          e.stopPropagation();
+          if (activeIndex < items.length - 1) scrollToIndex(activeIndex + 1);
+        }}
+        disabled={activeIndex === items.length - 1}
+        aria-label="Next image"
+      >
         ›
       </button>
-
-      <div className="counter">
+      <div className="gallery-counter">
         {activeIndex + 1} / {items.length}
       </div>
     </div>
@@ -62,46 +82,51 @@ function GallerySwipe({ items }: GallerySwipeProps): ReactElement {
 
 export default function PostMedia({
   post,
-}: PostMediaProps): ReactElement | null {
-  if (post.post_hint === "image" && post.url_overridden_by_dest) {
+  variant = "card",
+}: PostMediaProps): ReactElement {
+  const mediaClass =
+    variant === "modal" ? "post-media post-media--modal" : "post-media";
+  const mediaId = variant === "card" ? "post-media" : undefined;
+  const kind = getMediaKind(post);
+
+  if (kind === "image" && post.url_overridden_by_dest) {
     return (
       <img
         loading="lazy"
-        id="post-media"
+        id={mediaId}
+        className={mediaClass}
         src={post.url_overridden_by_dest}
         alt={post.title}
       />
     );
   }
 
-  if (post.is_video && post.media?.reddit_video?.fallback_url) {
+  if (kind === "video" && post.media?.reddit_video?.fallback_url) {
     return (
       <video
-        id="post-media"
+        className={mediaClass}
         controls
         src={post.media.reddit_video.fallback_url}
+        onClick={(e) => e.stopPropagation()}
       />
     );
   }
 
-  if (
-    post.url_overridden_by_dest &&
-    (post.url_overridden_by_dest.endsWith(".gif") ||
-      post.url_overridden_by_dest.endsWith(".gifv"))
-  ) {
+  if (kind === "gif" && post.url_overridden_by_dest) {
     return (
       <video
-        id="post-media"
+        className={mediaClass}
         autoPlay
         loop
         muted
         playsInline
         src={post.url_overridden_by_dest.replace(".gifv", ".mp4")}
+        onClick={(e) => e.stopPropagation()}
       />
     );
   }
 
-  if (post.is_gallery && post.media_metadata && post.gallery_data) {
+  if (kind === "gallery" && post.media_metadata && post.gallery_data) {
     const mediaMetadata = post.media_metadata;
     const items = post.gallery_data.items
       .map((it) => {
@@ -112,32 +137,49 @@ export default function PostMedia({
       })
       .filter((src): src is string => typeof src === "string");
 
-    if (items.length === 0) {
-      return null;
+    if (items.length > 0) {
+      return <GallerySwipe items={items} />;
     }
-
-    return <GallerySwipe items={items} />;
   }
 
-  if (post.post_hint === "link" && post.domain?.includes("youtube")) {
+  if (kind === "youtube" && post.url) {
     return (
       <iframe
-        id="post-media"
+        className={`${mediaClass} post-media--embed`}
         src={post.url.replace("watch?v=", "embed/")}
         title={post.title}
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
         allowFullScreen
+        onClick={(e) => e.stopPropagation()}
       />
     );
   }
 
-  if (post.post_hint === "link") {
+  if (kind === "link" && post.url) {
     return (
-      <a id="post-media" href={post.url} target="_blank" rel="noreferrer">
-        {post.url}
+      <a
+        className={`${mediaClass} post-media--link`}
+        href={post.url}
+        target="_blank"
+        rel="noreferrer"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <span className="post-media-link-domain">{post.domain ?? "Link"}</span>
+        <span className="post-media-link-url">{post.url}</span>
       </a>
     );
   }
 
-  return null;
+  if (kind === "thumbnail" && isValidThumbnail(post.thumbnail)) {
+    return (
+      <img
+        loading="lazy"
+        className={mediaClass}
+        src={post.thumbnail}
+        alt={post.title}
+      />
+    );
+  }
+
+  return <MediaPlaceholder title={post.title} />;
 }

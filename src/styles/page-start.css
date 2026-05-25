@@ -2,25 +2,47 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 60vh;
-  z-index: 1000;
+  flex-wrap: wrap;
+  gap: var(--space-8);
+  min-height: 50vh;
+  padding: var(--space-6);
 }
+
+.start-nav a {
+  display: flex;
+  padding: var(--space-4);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-md);
+  transition:
+    transform var(--transition-base),
+    box-shadow var(--transition-base);
+}
+
+.start-nav a:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+
 .start-nav img {
-  width: 100px;
-  height: 100px;
-  margin: 50px;
-  cursor: pointer;
+  width: clamp(4rem, 20vw, 6rem);
+  height: clamp(4rem, 20vw, 6rem);
+  object-fit: contain;
 }
+
 #flame-container {
   background-image:
-    linear-gradient(to bottom, rgb(255, 255, 255) 10%, transparent),
+    linear-gradient(to bottom, var(--color-bg) 10%, transparent),
     url("/starting-flame-minired.png");
   background-blend-mode: screen;
   background-size: cover;
   background-position: bottom;
   width: 100%;
-  height: 50%;
-  position: absolute;
-  bottom: 0;
+  height: 45%;
+  position: fixed;
+  bottom: var(--nav-height);
+  left: 0;
   z-index: -1;
+  pointer-events: none;
 }

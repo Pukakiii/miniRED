@@ -1,40 +1,42 @@
-import React, { useEffect, useMemo } from 'react';
-import { useLocation, useParams } from 'react-router-dom';
-import { useAppDispatch, useAppSelector } from '../app/hooks';
-import { fetchPopPostsThunk } from '../features/popularPost/popularPostSlice';
-import { fetchSubThunk } from '../features/subredditPost/subredditPostSlice';
-import Post from './postCard';
-import { LoadingCircle } from '../utils/miniComponents';
-import { ErrorDisplay } from '../utils/miniComponents';
+import { useCallback, useEffect, useMemo, useRef } from "react";
+import { useLocation, useParams } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "../app/hooks";
+import { fetchPopPostsThunk } from "../features/popularPost/popularPostSlice";
+import { fetchSubThunk } from "../features/subredditPost/subredditPostSlice";
+import { fetchMorePopThunk } from "../features/popularPost/popularPostSlice";
+import { fetchMoreSubThunk } from "../features/subredditPost/subredditPostSlice";
+import Post from "./postCard";
+import { LoadingCircle } from "../utils/miniComponents";
+import { ErrorDisplay } from "../utils/miniComponents";
 
 export default function Posts() {
   const dispatch = useAppDispatch();
   const location = useLocation();
   const { flair } = useParams<{ flair?: string }>();
-  console.log('Current flair:', flair);
 
-  //  page and category types
-  const [, pageRoute, category] = location.pathname.split('/');
-  const page = (pageRoute as 'popular' | 'subreddit') || '';
+  const [, pageRoute, category] = location.pathname.split("/");
+  const page = (pageRoute as "popular" | "subreddit") || "";
 
-  // Redux data fetching selectors
   const postsArr = useAppSelector((state) => state[page]?.posts?.data ?? []);
   const isLoading = useAppSelector(
     (state) => state[page]?.posts?.loading ?? false,
   );
+  const loadingMore = useAppSelector(
+    (state) => state[page]?.posts?.loadingMore ?? false,
+  );
+  const nextCursor = useAppSelector(
+    (state) => state[page]?.posts?.nextCursor ?? null,
+  );
   const error = useAppSelector((state) => state[page]?.posts?.error ?? null);
 
-  console.log('PostsArr:', postsArr);
-  // Posts refetching
   useEffect(() => {
-    if (page === 'popular') {
-      dispatch(fetchPopPostsThunk(category || ''));
-    } else if (page === 'subreddit' && category && postsArr.length === 0) {
+    if (page === "popular") {
+      dispatch(fetchPopPostsThunk(category || "best"));
+    } else if (page === "subreddit" && category) {
       dispatch(fetchSubThunk(category));
     }
   }, [category, dispatch, page]);
 
-  // Filtering subposts by flair
   const displayedPosts = useMemo(() => {
     if (!flair) return postsArr;
 
@@ -44,47 +46,83 @@ export default function Posts() {
     });
   }, [postsArr, flair]);
 
-  // rendering logic
+  const observerRef = useRef<IntersectionObserver | null>(null);
+  const lastElementRef = useRef<HTMLDivElement | null>(null);
+  const fetchingMoreRef = useRef(false);
+
+  const loadMore = useCallback(() => {
+    if (!nextCursor || fetchingMoreRef.current || loadingMore) return;
+    fetchingMoreRef.current = true;
+
+    if (page === "popular") {
+      dispatch(
+        fetchMorePopThunk({
+          category: category || "best",
+          after: nextCursor,
+        }),
+      ).finally(() => {
+        fetchingMoreRef.current = false;
+      });
+    } else if (page === "subreddit" && category) {
+      dispatch(
+        fetchMoreSubThunk({ subName: category, after: nextCursor }),
+      ).finally(() => {
+        fetchingMoreRef.current = false;
+      });
+    }
+  }, [category, dispatch, loadingMore, nextCursor, page]);
+
+  useEffect(() => {
+    const el = lastElementRef.current;
+    if (!el || !nextCursor || isLoading || loadingMore) return;
+
+    observerRef.current?.disconnect();
+    observerRef.current = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((e) => e.isIntersecting)) {
+          loadMore();
+        }
+      },
+      { rootMargin: "200px" },
+    );
+
+    observerRef.current.observe(el);
+    return () => observerRef.current?.disconnect();
+  }, [displayedPosts.length, isLoading, loadMore, loadingMore, nextCursor]);
+
   if (isLoading) {
     return <LoadingCircle />;
   }
 
   if (error) {
-    return <ErrorDisplay error={error} />;
+    if (typeof error === "object" && error !== null && "errorStatus" in error) {
+      return <ErrorDisplay error={error} />;
+    }
+    return (
+      <div className="error">
+        <p className="error-status">!</p>
+        <p>Failed to load posts. Please try again.</p>
+      </div>
+    );
   }
 
   return (
-    <>
-      {
-        <section className="posts">
-          {displayedPosts.map((postObj, index) => {
-            const [id, data] = Object.entries(postObj)[0];
+    <section className="posts">
+      {displayedPosts.map((postObj, index) => {
+        const [id, data] = Object.entries(postObj)[0];
+        const isLast = index === displayedPosts.length - 1;
 
-            // Calculate which row this pair of posts belongs to
-            const rowNumber = Math.floor(index / 2) + 1;
-
-            // Check if this is the second post in a row (even index cards: 1, 3, 5...)
-            const isEndOfRow = index % 2 === 1;
-
-            return (
-              <React.Fragment key={id}>
-                {/* Post Card */}
-                <Post index={index} data={data} />
-
-                {/* The Spacer - Forced into Column 2 of the current active row */}
-                {isEndOfRow && (
-                  <div
-                    className="post-spacer"
-                    style={{ gridRow: rowNumber, gridColumn: 2 }}>
-                    {rowNumber}{' '}
-                    {/* Displays the current index milestone number */}
-                  </div>
-                )}
-              </React.Fragment>
-            );
-          })}
-        </section>
-      }
-    </>
+        return (
+          <div
+            key={id}
+            className="post-cell"
+            ref={isLast ? lastElementRef : undefined}
+          >
+            <Post index={index} data={data} />
+          </div>
+        );
+      })}
+      {loadingMore && <LoadingCircle />}
+    </section>
   );
 }

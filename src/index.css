@@ -1,9 +1,38 @@
-* {
+@import "./styles/style-set.css";
+
+*,
+*::before,
+*::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-  font-family: 'Roboto', sans-serif;
+  overflow-y: auto !important;  
+  overflow-x: hidden !important;
+}
+*::-webkit-scrollbar {
+  display: none;
 }
 html {
   scroll-behavior: smooth;
+}
+
+body {
+  font-family: "Roboto", sans-serif;
+  background: #fff;
+  color: #000;
+}
+
+img,
+video,
+iframe {
+  max-width: 100%;
+}
+
+button {
+  font: inherit;
+}
+
+:focus-visible {
+  outline: 2px solid rgb(0, 136, 255);
+  outline-offset: 2px;
 }

@@ -3,18 +3,19 @@ import timeAgo from "../utils/hepersAPI";
 
 export async function fetchSubPosts(
   subName: string,
+  after?: string | null,
 ): Promise<FetchSubPostsResponse> {
   try {
+    const afterParam = after ? `&after=${after}` : "";
     const response = await fetch(
-      `https://corsproxy.io/?https://www.reddit.com/r/${subName}/new.json?limit=6`,
+      `https://corsproxy.io/?https://www.reddit.com/r/${subName}/new.json?limit=6${afterParam}`,
     );
     if (!response.ok) {
-      const errorObj = new Error(`HTTP error! status: ${response.ok}`);
+      const errorObj = new Error(`HTTP error! status: ${response.status}`);
       (errorObj as any).status = response.status;
       throw errorObj;
     }
     const postsData: any = await response.json();
-    console.log("Fetched subposts:", postsData);
     const linkFlairs: string[] = [];
     return {
       posts: postsData.data.children.map((child: any) => {
@@ -53,6 +54,7 @@ export async function fetchSubPosts(
         };
       }),
       numPosts: postsData.data.dist,
+      after: postsData.data.after ?? null,
       linkFlairs,
     };
   } catch (error) {

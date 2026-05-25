@@ -14,15 +14,32 @@ export const fetchSubThunk = createAsyncThunk<
 >("subreddit/fetchSubThunk", async (subName: string, { rejectWithValue }) => {
   try {
     const response = await fetchSubPosts(subName);
-    console.log("Fetched sub:", response);
     return response;
   } catch (error: any) {
-    const statusCode = error.status || 500; 
+    const statusCode = error.status || 500;
 
     return rejectWithValue({
       errorMessage: error.message || "Failed to fetch posts",
-      errorStatus: statusCode, 
-      arg: subName, 
+      errorStatus: statusCode,
+      arg: subName,
+    });
+  }
+});
+
+export const fetchMoreSubThunk = createAsyncThunk<
+  FetchSubPostsResponse,
+  { subName: string; after?: string | null },
+  { rejectValue: { errorMessage: string; errorStatus: number; arg: string } }
+>("subreddit/fetchMoreSubThunk", async (payload, { rejectWithValue }) => {
+  try {
+    const response = await fetchSubPosts(payload.subName, payload.after);
+    return response;
+  } catch (error: any) {
+    const statusCode = error.status || 500;
+    return rejectWithValue({
+      errorMessage: error.message || "Failed to fetch posts",
+      errorStatus: statusCode,
+      arg: payload.subName,
     });
   }
 });
@@ -33,11 +50,13 @@ interface SubredditState {
     linkFlairs: string[];
     numPosts: number;
     loading: boolean;
+    loadingMore: boolean;
     error: {
       errorMessage: string;
       errorStatus: number;
       arg: string;
     } | null;
+    nextCursor?: string | null;
   };
 }
 
@@ -47,7 +66,9 @@ const initialState: SubredditState = {
     linkFlairs: [],
     numPosts: 0,
     loading: false,
-    error: null, 
+    loadingMore: false,
+    error: null,
+    nextCursor: null,
   },
 };
 
@@ -68,26 +89,45 @@ export const subRedditSlice = createSlice({
       state.posts.numPosts = numPosts;
       state.posts.linkFlairs = linkFlairs;
     },
+    appendSubPosts(
+      state,
+      action: PayloadAction<{ posts: PostRecord[]; after?: string | null }>,
+    ) {
+      state.posts.data = state.posts.data.concat(action.payload.posts);
+      state.posts.nextCursor = action.payload.after ?? null;
+    },
   },
   extraReducers: (builder) => {
     builder
       .addCase(fetchSubThunk.pending, (state) => {
         state.posts.numPosts = 0;
         state.posts.loading = true;
-        state.posts.error = null; 
+        state.posts.error = null;
       })
       .addCase(fetchSubThunk.fulfilled, (state, action) => {
-        const { posts, numPosts, linkFlairs } = action.payload;
+        const { posts, numPosts, linkFlairs, after } = action.payload;
         state.posts.data = posts;
         state.posts.numPosts = numPosts;
         state.posts.linkFlairs = linkFlairs;
+        state.posts.nextCursor = after ?? null;
         localStorage.setItem("subreddit", JSON.stringify(action.payload));
         state.posts.loading = false;
         state.posts.error = null;
       })
+      .addCase(fetchMoreSubThunk.pending, (state) => {
+        state.posts.loadingMore = true;
+      })
+      .addCase(fetchMoreSubThunk.fulfilled, (state, action) => {
+        const { posts, after } = action.payload;
+        state.posts.data = state.posts.data.concat(posts);
+        state.posts.nextCursor = after ?? null;
+        state.posts.loadingMore = false;
+      })
+      .addCase(fetchMoreSubThunk.rejected, (state) => {
+        state.posts.loadingMore = false;
+      })
       .addCase(fetchSubThunk.rejected, (state, action) => {
         state.posts.numPosts = 0;
-        console.log("--", action);
         state.posts.data = [];
         state.posts.linkFlairs = [];
         state.posts.loading = false;

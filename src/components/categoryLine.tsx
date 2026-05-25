@@ -1,38 +1,72 @@
 import { useParams, useLocation, NavLink } from "react-router-dom";
+import { useMemo } from "react";
 import { useAppSelector } from "../app/hooks";
 import type { RootState } from "../app/store";
-import type { ReactElement } from "react";
+import type { PostRecord } from "../types";
+import { anchorLabel, getAnchorIndices } from "../utils/anchorUtils";
+import { useActivePostAnchor } from "../hooks/useActivePostAnchor";
+
+function filterByFlair(posts: PostRecord[], flair?: string) {
+  if (!flair) return posts;
+  return posts.filter((postObj) => {
+    const [, data] = Object.entries(postObj)[0];
+    return data?.category === flair;
+  });
+}
 
 export default function CategoryLine() {
   const location = useLocation();
-  const params = useParams<{ name?: string }>();
-
-  const numPosts = useAppSelector((state: RootState) => {
-    if (location.pathname.includes("popular")) {
-      return state.popular.posts.numPosts;
-    }
-    if (location.pathname.includes("subreddit")) {
-      return state.subreddit.posts.numPosts;
-    }
-    return 0;
-  });
+  const params = useParams<{ name?: string; flair?: string }>();
 
   const linkFlairs = useAppSelector(
     (state: RootState) => state.subreddit.posts.linkFlairs ?? [],
   );
 
-  const checkPoints = Math.max(0, Math.floor(numPosts / 5));
+  const postsArr = useAppSelector((state: RootState) => {
+    if (location.pathname.includes("popular"))
+      return state.popular.posts.data ?? [];
+    if (location.pathname.includes("subreddit"))
+      return state.subreddit.posts.data ?? [];
+    return [];
+  });
+
+  const displayedPosts = useMemo(
+    () => filterByFlair(postsArr, params.flair),
+    [postsArr, params.flair],
+  );
+
+  const anchorIndices = getAnchorIndices(displayedPosts.length);
+
+  const anchorPostIds = useMemo(
+    () =>
+      anchorIndices
+        .map((idx) => {
+          const postObj = displayedPosts[idx];
+          if (!postObj) return null;
+          return Object.keys(postObj)[0];
+        })
+        .filter((id): id is string => Boolean(id)),
+    [anchorIndices, displayedPosts],
+  );
+
+  const activePostId = useActivePostAnchor(anchorPostIds);
 
   function createCheckPoints() {
-    const checkPointsArray: ReactElement[] = [];
-    for (let i = 0; i <= checkPoints; i++) {
-      checkPointsArray.push(
-        <a href={`#anchor-${i * 5}`} key={i} className="points">
-          {i * 5}
-        </a>,
+    return anchorIndices.map((idx) => {
+      const postObj = displayedPosts[idx];
+      if (!postObj) return null;
+      const [id] = Object.keys(postObj);
+      const isActive = activePostId === id;
+      return (
+        <a
+          href={`#post-${id}`}
+          key={id}
+          className={isActive ? "points points-active" : "points"}
+        >
+          {anchorLabel(idx)}
+        </a>
       );
-    }
-    return checkPointsArray;
+    });
   }
 
   function createCategoryLinks() {
@@ -64,10 +98,14 @@ export default function CategoryLine() {
           ))}
         </>
       ) : (
-        <p style={{ color: "rgba(0, 0, 0, 0.5)" }}>no categories here</p>
+        <p className="filter-empty">no categories here</p>
       );
     }
 
+    return null;
+  }
+
+  if (location.pathname === "/" || location.pathname.includes("/saved")) {
     return null;
   }
 
