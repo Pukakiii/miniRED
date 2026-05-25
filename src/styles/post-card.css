@@ -18,18 +18,12 @@
   width: 100%;
   min-width: 0;
   background: #fff;
-  overflow: hidden;
+  overflow: visible;
 }
 
 .post:hover {
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-  transform: translateY(-5px);
+  box-shadow: 0px 0px 1px rgba(255, 52, 52, 0.1);
   cursor: pointer;
-}
-
-.post:focus-visible {
-  outline: 2px solid rgb(0, 136, 255);
-  outline-offset: 2px;
 }
 
 .post div span {
@@ -232,22 +226,17 @@
 /* Anchor badge — inside card, always aligned */
 .anchor {
   position: absolute;
-  top: 0.45rem;
-  right: 0.65rem;
-  left: auto;
-  transform: none;
-  z-index: 12;
+  top: 0.5rem;
+  right: 0.5rem;
+  /* left: auto; */
+  /* transform: none; */
+  z-index: 1200;
   font-family: "Courier New", Courier, monospace;
-  font-size: 0.7rem;
+  font-size: 1rem;
   font-weight: 700;
   line-height: 1;
   padding: 0.2rem 0.45rem;
   color: rgb(100, 100, 100);
-  background: rgba(255, 255, 255, 0.92);
-  border: 1px solid rgba(0, 0, 0, 0.15);
-  border-radius: 4px;
-  pointer-events: none;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
 }
 
 @media (max-width: 1024px) {

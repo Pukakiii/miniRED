@@ -24,7 +24,7 @@ export default function Navbar() {
           </NavLink>
         </li>
         <li>
-          <NavLink to={refreshTarget}>
+          <NavLink to="/">
             <img src={refresh} alt="refresh feed" />
           </NavLink>
         </li>

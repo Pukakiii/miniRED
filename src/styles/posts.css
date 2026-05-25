@@ -8,8 +8,6 @@
   margin: 0 auto;
   overflow-x: hidden;
   scroll-behavior: smooth;
-  scrollbar-width: none;
-  padding: 1.78rem;
   padding-bottom: 8.6rem;
   justify-content: center;
 }
@@ -20,12 +18,11 @@
 
 .post-cell {
   min-width: 0;
+  max-width: auto;
+  max-height: 100%;
   display: flex;
   justify-content: center;
-}
-
-.post-cell .post {
-  max-width: 400px;
+  overflow: visible;
 }
 
 .loading-circle {
@@ -75,6 +72,7 @@
 }
 
 .saved-posts {
+  margin-top: 2rem;
   grid-template-columns: minmax(0, 400px);
   justify-content: center;
 }
