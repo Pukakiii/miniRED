@@ -110,7 +110,7 @@
   border-radius: 1rem;
   overflow-x: auto;
   padding: 1px 0;
-  scrollbar-width: thin;
+  background: linear-gradient(to right, transparent 80%, rgba(255, 255, 255, 0.5));
 }
 
 .points {

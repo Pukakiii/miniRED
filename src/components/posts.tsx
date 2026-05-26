@@ -90,6 +90,9 @@ export default function Posts() {
     return () => observerRef.current?.disconnect();
   }, [displayedPosts.length, isLoading, loadMore, loadingMore, nextCursor]);
 
+  if (!isLoading && !error && displayedPosts.length === 0) {
+    return <p id="init-post-message">Search for posts.</p>;
+  }
   if (isLoading) {
     return <LoadingCircle />;
   }

@@ -24,7 +24,22 @@
   justify-content: center;
   overflow: visible;
 }
-
+#init-post-message {
+  margin: 0 auto;
+  position: absolute;
+  width:min-content;
+  min-width: 75vw;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  align-self: start;
+  font-family: "Arial", sans-serif;
+  font-style: italic;
+  font-weight: bolder;
+  font-size: 15vw;
+  line-height: 0.8;
+  color: rgba(255, 131, 73, 0.5);
+}
 .loading-circle {
   width: 50px;
   height: 50px;
